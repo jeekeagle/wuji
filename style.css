@@ -135,18 +135,36 @@ body[data-theme="washi"] .card {
 }
 
 body[data-theme="washi"] .content {
-  padding: clamp(2.5rem, 5vw, 4rem) clamp(2rem, 5vw, 3.5rem);
+  padding: clamp(2rem, 4.5vw, 3.5rem) clamp(2.5rem, 5vw, 4rem);
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: clamp(1.5rem, 3vw, 2.5rem);
+  align-items: center;
 }
 
 body[data-theme="washi"] .title {
   font-family: var(--font-zh);
   font-weight: 400;
-  font-size: clamp(28px, 3.4vw, 42px);
+  font-size: clamp(28px, 3.4vw, 44px);
   letter-spacing: 0.08em;
   display: flex;
   align-items: baseline;
   gap: 0.6em;
-  margin-bottom: 0.8em;
+  margin-bottom: 0.5em;
+  flex-wrap: wrap;
+}
+
+body[data-theme="washi"] .content-head {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+body[data-theme="washi"] .content-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.3em;
 }
 
 body[data-theme="washi"] .title .zh {
@@ -174,7 +192,7 @@ body[data-theme="washi"] .subtitle {
   font-size: clamp(13px, 1.3vw, 15px);
   color: var(--ink-soft);
   letter-spacing: 0.35em;
-  margin-bottom: 2em;
+  margin-bottom: 0;
   font-weight: 300;
 }
 
@@ -299,7 +317,11 @@ body[data-theme="handdrawn"] .card:hover {
 }
 
 body[data-theme="handdrawn"] .content {
-  padding: clamp(2.5rem, 5vw, 4rem) clamp(2rem, 5vw, 3.5rem);
+  padding: clamp(2rem, 4.5vw, 3.5rem) clamp(2.5rem, 5vw, 4rem);
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: clamp(1.5rem, 3vw, 2.5rem);
+  align-items: center;
   position: relative;
 }
 
@@ -320,18 +342,32 @@ body[data-theme="handdrawn"] .content::before {
 body[data-theme="handdrawn"] .title {
   font-family: var(--font-zh);
   font-weight: 700;
-  font-size: clamp(34px, 4vw, 48px);
+  font-size: clamp(34px, 4vw, 50px);
   letter-spacing: 0.02em;
   display: flex;
   align-items: baseline;
   gap: 0.5em;
-  margin-bottom: 0.6em;
+  margin-bottom: 0.4em;
   color: var(--ink);
+  flex-wrap: wrap;
+}
+
+body[data-theme="handdrawn"] .content-head {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 body[data-theme="handdrawn"] .title .zh {
   display: inline-block;
   transform: rotate(-2deg);
+}
+
+body[data-theme="handdrawn"] .content-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.5em;
 }
 
 body[data-theme="handdrawn"] .title .bar {
@@ -356,7 +392,7 @@ body[data-theme="handdrawn"] .subtitle {
   font-size: clamp(14px, 1.5vw, 17px);
   color: var(--ink-soft);
   letter-spacing: 0.05em;
-  margin-bottom: 2em;
+  margin-bottom: 0;
   font-style: italic;
   transform: rotate(0.3deg);
   display: inline-block;
@@ -467,13 +503,18 @@ body[data-theme="handdrawn"] .signature::after {
 
 .card {
   width: 100%;
-  max-width: 480px;
+  max-width: 900px;
+  min-height: 450px;
   position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .content {
   position: relative;
   z-index: 2;
+  width: 100%;
 }
 
 /* ============================================
@@ -551,6 +592,17 @@ body[data-theme="handdrawn"] .theme-switcher .sep {
 /* ============================================
    响应式
    ============================================ */
+
+@media (max-width: 720px) {
+  body[data-theme="washi"] .content,
+  body[data-theme="handdrawn"] .content {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  .card {
+    min-height: 0;
+  }
+}
 
 @media (max-width: 600px) {
   .title {
