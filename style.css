@@ -1,21 +1,20 @@
 /* ========================================
    无记 · wuji
-   宣纸 + 朱墨 + 印章
+   Washi + Koushi grid · 当代禅意
    ======================================== */
 
 :root {
-  /* ── 宣纸与墨 ── */
-  --paper: #f7f5f0;
-  --paper-shade: #efeae0;
+  /* 和纸与墨 */
+  --paper: #f5f0e6;
+  --paper-warm: #efe7d6;
   --ink: #1a1a1a;
   --ink-soft: #6a6a6a;
-  --ink-faint: #b8b2a4;
+  --ink-faint: #9a948a;
 
-  /* ── 朱砂 ── */
-  --cinnabar: #a52a2a;
-  --cinnabar-deep: #8a1f1f;
+  /* 罫紙网格线 */
+  --grid: rgba(26, 26, 26, 0.055);
 
-  /* ── 字体 ── */
+  /* 字体 */
   --serif-cn: "Noto Serif SC", "Songti SC", "STSong", "SimSun", serif;
   --serif-en: "Cormorant Garamond", "EB Garamond", Georgia, serif;
 
@@ -40,84 +39,66 @@ body {
 
 body {
   min-height: 100vh;
-  display: flex;
-  flex-direction: column;
   position: relative;
   overflow-x: hidden;
 }
 
-/* ── 极轻的宣纸纹理：两层径向渐变模拟光线不均 ── */
+/* ============================================
+   Layer 1 · Washi 纸张纹理
+   feTurbulence 模拟纤维感，multiply 混合
+   ============================================ */
+
 body::before {
   content: "";
   position: fixed;
   inset: 0;
-  background:
-    radial-gradient(ellipse 60% 50% at 20% 25%, rgba(184, 178, 164, 0.05) 0%, transparent 60%),
-    radial-gradient(ellipse 70% 60% at 80% 75%, rgba(184, 178, 164, 0.04) 0%, transparent 60%);
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='400'><filter id='paper'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' seed='3'/><feColorMatrix values='0 0 0 0 0.55  0 0 0 0 0.50  0 0 0 0 0.42  0 0 0 0.18 0'/></filter><rect width='100%' height='100%' filter='url(%23paper)'/></svg>");
   pointer-events: none;
-  z-index: 0;
+  z-index: 1;
+  opacity: 0.55;
+  mix-blend-mode: multiply;
 }
 
 /* ============================================
-   引首章（header / 压角章）
+   Layer 2 · Koushi 罫紙网格
+   32px × 32px 浅灰细线
    ============================================ */
 
-.mark {
-  position: absolute;
-  top: 2.5rem;
-  right: 2.5rem;
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(to right, var(--grid) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid) 1px, transparent 1px);
+  background-size: 32px 32px;
+  pointer-events: none;
   z-index: 2;
 }
 
-.mark span {
-  display: inline-block;
-  font-family: var(--serif-cn);
-  font-size: 11px;
-  color: var(--ink-faint);
-  letter-spacing: 0.4em;
-  text-indent: 0.4em;
-  writing-mode: vertical-rl;
-  text-orientation: upright;
-  border-left: 1px solid var(--ink-faint);
-  padding-left: 0.7em;
-  padding-top: 0.7em;
-  line-height: 1.5;
-  transition: color 0.6s var(--ease);
-}
-
-.mark:hover span {
-  color: var(--cinnabar-deep);
-  border-left-color: var(--cinnabar-deep);
-}
-
 /* ============================================
-   stage（中央主内容）
+   Stage · 垂直居中 + 略向左偏移
    ============================================ */
 
 .stage {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 6rem 1.5rem;
   position: relative;
-  z-index: 1;
-}
-
-.axis {
+  z-index: 10;
+  min-height: 100vh;
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 1.8rem;
-  max-width: 600px;
-  width: 100%;
-  animation: rise 1.4s var(--ease) both;
+  padding: 6rem 1.5rem;
 }
 
-@keyframes rise {
+.content {
+  margin-left: clamp(2rem, 9vw, 12rem);
+  max-width: 520px;
+  animation: enter 1.6s var(--ease) both;
+}
+
+@keyframes enter {
   from {
     opacity: 0;
-    transform: translateY(10px);
+    transform: translateY(8px);
   }
   to {
     opacity: 1;
@@ -126,119 +107,76 @@ body::before {
 }
 
 /* ============================================
-   brand（"无记"）
+   Title · "无记 | AVYAKATA"
    ============================================ */
 
-.brand {
+.title {
+  display: flex;
+  align-items: baseline;
+  gap: 0.55em;
+  font-size: clamp(24px, 2.6vw, 32px);
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  line-height: 1.2;
+  color: var(--ink);
+  margin-bottom: 0.7rem;
+}
+
+.title .zh {
   font-family: var(--serif-cn);
-  font-size: clamp(80px, 16vw, 168px);
   font-weight: 400;
   letter-spacing: 0.06em;
-  line-height: 1;
-  display: flex;
-  gap: 0.1em;
-  margin-bottom: 0.4rem;
 }
 
-.brand .char {
-  display: inline-block;
+.title .bar {
+  color: var(--ink-faint);
+  font-weight: 200;
+  font-size: 0.95em;
+  margin: 0 -0.05em;
+  user-select: none;
 }
 
-.brand .ink-accent {
-  color: var(--cinnabar);
-  font-weight: 500;
+.title .en {
+  font-family: var(--serif-en);
+  letter-spacing: 0.22em;
+  font-weight: 400;
+  font-size: 0.7em;
+  color: var(--ink-soft);
+  text-transform: uppercase;
 }
 
 /* ============================================
-   subtitle（中英双行）
+   Subtitle · "记录 · 而获得自己"
    ============================================ */
 
 .subtitle {
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
-  margin-bottom: 0.6rem;
-}
-
-.subtitle .zh {
   font-family: var(--serif-cn);
-  font-size: clamp(14px, 1.4vw, 17px);
-  color: var(--ink-soft);
-  letter-spacing: 0.4em;
-  text-indent: 0.4em;
-  font-weight: 400;
-}
-
-.subtitle .en {
-  font-family: var(--serif-en);
   font-size: clamp(13px, 1.2vw, 15px);
-  color: var(--ink-faint);
-  font-style: italic;
-  font-weight: 300;
-  letter-spacing: 0.04em;
+  color: var(--ink-soft);
+  letter-spacing: 0.42em;
+  text-indent: 0.42em;
+  font-weight: 400;
+  margin-bottom: 4rem;
 }
 
 /* ============================================
-   seal（朱砂印章 — 核心记忆点）
-   ============================================ */
-
-.seal {
-  width: clamp(60px, 6.4vw, 76px);
-  height: clamp(60px, 6.4vw, 76px);
-  background: var(--cinnabar);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--paper);
-  font-family: var(--serif-cn);
-  font-size: clamp(38px, 4vw, 48px);
-  font-weight: 700;
-  letter-spacing: 0;
-  margin: 0.8rem 0 0.4rem;
-  position: relative;
-  filter: contrast(1.05) saturate(1.05);
-  transition: transform 0.6s var(--ease);
-}
-
-.seal::before {
-  content: "";
-  position: absolute;
-  inset: 5%;
-  border: 1px solid var(--paper);
-  opacity: 0.55;
-}
-
-.seal span {
-  position: relative;
-  z-index: 1;
-  line-height: 1;
-}
-
-.seal:hover {
-  transform: rotate(-2deg);
-}
-
-/* ============================================
-   links（导航链接）
+   Links · 导航链接
    ============================================ */
 
 .links {
   display: flex;
   flex-direction: column;
-  gap: 1.6rem;
-  width: 100%;
-  max-width: 380px;
-  margin-top: 1.4rem;
+  gap: 1.4rem;
+  max-width: 420px;
 }
 
 .links a {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
+  display: grid;
+  grid-template-columns: auto auto 1fr auto;
+  align-items: baseline;
+  gap: 0.9rem;
   text-decoration: none;
-  padding: 0.4rem 0 0.6rem;
+  padding: 0.5rem 0;
   transition: transform 0.5s var(--ease);
 }
 
@@ -246,51 +184,26 @@ body::before {
   transform: translateX(4px);
 }
 
-.links .row {
-  display: flex;
-  align-items: baseline;
-  gap: 0.6rem;
-  font-family: var(--serif-cn);
-  font-size: 19px;
-  color: var(--ink);
-  font-weight: 400;
-  letter-spacing: 0.08em;
-}
-
-.links .line {
-  flex: 1;
+.links .leader {
+  display: inline-block;
+  width: 24px;
   height: 1px;
   background: var(--ink-faint);
   margin-bottom: 5px;
-  margin-left: 0.4rem;
-  margin-right: 0.4rem;
-  position: relative;
-  overflow: hidden;
+  transition: width 0.5s var(--ease), background 0.5s var(--ease);
 }
 
-.links .line::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: var(--cinnabar);
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform 0.6s var(--ease);
+.links a:hover .leader {
+  width: 44px;
+  background: var(--ink);
 }
 
-.links a:hover .line::before {
-  transform: scaleX(1);
-}
-
-.links .arrow {
-  color: var(--ink-soft);
-  font-size: 15px;
-  transition: transform 0.4s var(--ease), color 0.4s ease;
-}
-
-.links a:hover .arrow {
-  transform: translate(2px, -2px);
-  color: var(--cinnabar);
+.links .label {
+  font-family: var(--serif-cn);
+  font-size: 16px;
+  color: var(--ink);
+  letter-spacing: 0.16em;
+  font-weight: 400;
 }
 
 .links .desc {
@@ -299,82 +212,73 @@ body::before {
   color: var(--ink-faint);
   font-style: italic;
   letter-spacing: 0.04em;
+  justify-self: start;
 }
 
-/* ============================================
-   signature（落款 / footer）
-   ============================================ */
-
-.signature {
-  padding: 2.5rem;
-  text-align: left;
-  z-index: 2;
-  position: relative;
-}
-
-.signature span {
-  font-family: var(--serif-en);
-  font-size: 11px;
+.links .arrow {
   color: var(--ink-faint);
-  letter-spacing: 0.3em;
-  text-indent: 0.3em;
-  font-style: italic;
-  font-weight: 300;
+  font-size: 14px;
+  transition: transform 0.4s var(--ease), color 0.4s ease;
+}
+
+.links a:hover .arrow {
+  transform: translate(2px, -2px);
+  color: var(--ink);
 }
 
 /* ============================================
-   responsive
+   Responsive
    ============================================ */
 
-@media (max-width: 700px) {
-  .mark {
-    top: 1.5rem;
-    right: 1.5rem;
-  }
-
-  .mark span {
-    font-size: 10px;
-    padding-left: 0.5em;
-    padding-top: 0.5em;
-  }
-
+@media (max-width: 800px) {
   .stage {
     padding: 4rem 1.5rem;
   }
 
-  .axis {
-    gap: 1.5rem;
+  .content {
+    margin-left: 1.5rem;
+    margin-right: 1.5rem;
+    max-width: none;
   }
 
-  .signature {
-    padding: 1.5rem;
-    text-align: center;
+  .title {
+    font-size: 22px;
+    gap: 0.45em;
+  }
+
+  .title .en {
+    font-size: 0.65em;
+  }
+
+  .subtitle {
+    font-size: 12px;
+    letter-spacing: 0.35em;
+    margin-bottom: 3rem;
+  }
+
+  .links {
+    max-width: none;
   }
 }
 
 @media (max-width: 400px) {
-  .brand {
-    letter-spacing: 0.04em;
-  }
-
-  .links .row {
-    font-size: 17px;
+  .title {
+    flex-wrap: wrap;
+    font-size: 20px;
   }
 }
 
 /* ============================================
-   reduced motion
+   Reduced motion
    ============================================ */
 
 @media (prefers-reduced-motion: reduce) {
-  .axis {
+  .content {
     animation: none;
   }
   .links a,
-  .links .line::before,
-  .links .arrow,
-  .seal,
-  .mark span {
+  .links .leader,
+  .links .arrow {
     transition: none;
   }
 }
