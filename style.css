@@ -1,14 +1,21 @@
 /* ========================================
    无记 · wuji
+   宣纸 + 朱墨 + 印章
    ======================================== */
 
 :root {
-  --bg: #f7f5f0;
+  /* ── 宣纸与墨 ── */
+  --paper: #f7f5f0;
+  --paper-shade: #efeae0;
   --ink: #1a1a1a;
-  --ink-soft: #888;
-  --ink-faint: #c0bab0;
-  --accent: #8b1a1a;
+  --ink-soft: #6a6a6a;
+  --ink-faint: #b8b2a4;
 
+  /* ── 朱砂 ── */
+  --cinnabar: #a52a2a;
+  --cinnabar-deep: #8a1f1f;
+
+  /* ── 字体 ── */
   --serif-cn: "Noto Serif SC", "Songti SC", "STSong", "SimSun", serif;
   --serif-en: "Cormorant Garamond", "EB Garamond", Georgia, serif;
 
@@ -23,7 +30,7 @@
 
 html,
 body {
-  background: var(--bg);
+  background: var(--paper);
   color: var(--ink);
   font-family: var(--serif-cn);
   -webkit-font-smoothing: antialiased;
@@ -35,25 +42,82 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  position: relative;
+  overflow-x: hidden;
 }
 
-/* ───── stage ───── */
+/* ── 极轻的宣纸纹理：两层径向渐变模拟光线不均 ── */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 50% at 20% 25%, rgba(184, 178, 164, 0.05) 0%, transparent 60%),
+    radial-gradient(ellipse 70% 60% at 80% 75%, rgba(184, 178, 164, 0.04) 0%, transparent 60%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ============================================
+   引首章（header / 压角章）
+   ============================================ */
+
+.mark {
+  position: absolute;
+  top: 2.5rem;
+  right: 2.5rem;
+  z-index: 2;
+}
+
+.mark span {
+  display: inline-block;
+  font-family: var(--serif-cn);
+  font-size: 11px;
+  color: var(--ink-faint);
+  letter-spacing: 0.4em;
+  text-indent: 0.4em;
+  writing-mode: vertical-rl;
+  text-orientation: upright;
+  border-left: 1px solid var(--ink-faint);
+  padding-left: 0.7em;
+  padding-top: 0.7em;
+  line-height: 1.5;
+  transition: color 0.6s var(--ease);
+}
+
+.mark:hover span {
+  color: var(--cinnabar-deep);
+  border-left-color: var(--cinnabar-deep);
+}
+
+/* ============================================
+   stage（中央主内容）
+   ============================================ */
 
 .stage {
   flex: 1;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 4rem 1.5rem;
-  gap: 2.5rem;
+  padding: 6rem 1.5rem;
+  position: relative;
+  z-index: 1;
+}
+
+.axis {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.8rem;
+  max-width: 600px;
+  width: 100%;
   animation: rise 1.4s var(--ease) both;
 }
 
 @keyframes rise {
   from {
     opacity: 0;
-    transform: translateY(12px);
+    transform: translateY(10px);
   }
   to {
     opacity: 1;
@@ -61,132 +125,256 @@ body {
   }
 }
 
-/* ───── brand ───── */
+/* ============================================
+   brand（"无记"）
+   ============================================ */
 
 .brand {
   font-family: var(--serif-cn);
-  font-size: clamp(72px, 14vw, 144px);
+  font-size: clamp(80px, 16vw, 168px);
   font-weight: 400;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.06em;
   line-height: 1;
   display: flex;
-  gap: 0.15em;
+  gap: 0.1em;
+  margin-bottom: 0.4rem;
 }
 
-.ink-accent {
-  color: var(--accent);
+.brand .char {
+  display: inline-block;
 }
 
-/* ───── subtitle ───── */
+.brand .ink-accent {
+  color: var(--cinnabar);
+  font-weight: 500;
+}
+
+/* ============================================
+   subtitle（中英双行）
+   ============================================ */
 
 .subtitle {
-  font-family: var(--serif-en);
-  font-size: clamp(14px, 1.4vw, 18px);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-bottom: 0.6rem;
+}
+
+.subtitle .zh {
+  font-family: var(--serif-cn);
+  font-size: clamp(14px, 1.4vw, 17px);
   color: var(--ink-soft);
   letter-spacing: 0.4em;
   text-indent: 0.4em;
   font-weight: 400;
+}
+
+.subtitle .en {
+  font-family: var(--serif-en);
+  font-size: clamp(13px, 1.2vw, 15px);
+  color: var(--ink-faint);
   font-style: italic;
+  font-weight: 300;
+  letter-spacing: 0.04em;
 }
 
-/* ───── divider ───── */
+/* ============================================
+   seal（朱砂印章 — 核心记忆点）
+   ============================================ */
 
-.divider {
-  display: block;
-  width: 60px;
-  height: 1px;
-  background: var(--ink-faint);
-  margin: 0.5rem 0;
+.seal {
+  width: clamp(60px, 6.4vw, 76px);
+  height: clamp(60px, 6.4vw, 76px);
+  background: var(--cinnabar);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--paper);
+  font-family: var(--serif-cn);
+  font-size: clamp(38px, 4vw, 48px);
+  font-weight: 700;
+  letter-spacing: 0;
+  margin: 0.8rem 0 0.4rem;
+  position: relative;
+  filter: contrast(1.05) saturate(1.05);
+  transition: transform 0.6s var(--ease);
 }
 
-/* ───── links ───── */
+.seal::before {
+  content: "";
+  position: absolute;
+  inset: 5%;
+  border: 1px solid var(--paper);
+  opacity: 0.55;
+}
+
+.seal span {
+  position: relative;
+  z-index: 1;
+  line-height: 1;
+}
+
+.seal:hover {
+  transform: rotate(-2deg);
+}
+
+/* ============================================
+   links（导航链接）
+   ============================================ */
 
 .links {
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;
+  gap: 1.6rem;
+  width: 100%;
+  max-width: 380px;
+  margin-top: 1.4rem;
 }
 
 .links a {
   position: relative;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.8rem;
-  font-family: var(--serif-cn);
-  font-size: 18px;
-  color: var(--ink);
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
   text-decoration: none;
-  padding: 0.5rem 0.4rem 0.5rem 0;
+  padding: 0.4rem 0 0.6rem;
   transition: transform 0.5s var(--ease);
 }
 
-.links a::after {
+.links a:hover {
+  transform: translateX(4px);
+}
+
+.links .row {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  font-family: var(--serif-cn);
+  font-size: 19px;
+  color: var(--ink);
+  font-weight: 400;
+  letter-spacing: 0.08em;
+}
+
+.links .line {
+  flex: 1;
+  height: 1px;
+  background: var(--ink-faint);
+  margin-bottom: 5px;
+  margin-left: 0.4rem;
+  margin-right: 0.4rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.links .line::before {
   content: "";
   position: absolute;
-  left: 0;
-  bottom: 0;
-  height: 1px;
-  width: 0;
-  background: var(--ink);
-  transition: width 0.5s var(--ease);
+  inset: 0;
+  background: var(--cinnabar);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.6s var(--ease);
 }
 
-.links a:hover {
-  transform: translateX(6px);
+.links a:hover .line::before {
+  transform: scaleX(1);
 }
 
-.links a:hover::after {
-  width: calc(100% - 1.6rem);
-}
-
-.arrow {
+.links .arrow {
   color: var(--ink-soft);
-  font-size: 14px;
-  transition: transform 0.5s var(--ease), color 0.5s ease;
+  font-size: 15px;
+  transition: transform 0.4s var(--ease), color 0.4s ease;
 }
 
 .links a:hover .arrow {
-  transform: translateX(4px);
-  color: var(--ink);
+  transform: translate(2px, -2px);
+  color: var(--cinnabar);
 }
 
-/* ───── footer ───── */
-
-.foot {
-  padding: 2rem 1.5rem;
-  text-align: center;
+.links .desc {
   font-family: var(--serif-en);
   font-size: 12px;
-  color: var(--ink-soft);
+  color: var(--ink-faint);
+  font-style: italic;
+  letter-spacing: 0.04em;
+}
+
+/* ============================================
+   signature（落款 / footer）
+   ============================================ */
+
+.signature {
+  padding: 2.5rem;
+  text-align: left;
+  z-index: 2;
+  position: relative;
+}
+
+.signature span {
+  font-family: var(--serif-en);
+  font-size: 11px;
+  color: var(--ink-faint);
   letter-spacing: 0.3em;
   text-indent: 0.3em;
+  font-style: italic;
+  font-weight: 300;
 }
 
-/* ───── responsive ───── */
+/* ============================================
+   responsive
+   ============================================ */
 
-@media (max-width: 600px) {
+@media (max-width: 700px) {
+  .mark {
+    top: 1.5rem;
+    right: 1.5rem;
+  }
+
+  .mark span {
+    font-size: 10px;
+    padding-left: 0.5em;
+    padding-top: 0.5em;
+  }
+
   .stage {
-    padding: 3rem 1.5rem;
-    gap: 2rem;
+    padding: 4rem 1.5rem;
   }
-  .brand {
-    letter-spacing: 0.05em;
-    gap: 0.08em;
+
+  .axis {
+    gap: 1.5rem;
   }
-  .links a {
-    font-size: 16px;
+
+  .signature {
+    padding: 1.5rem;
+    text-align: center;
   }
 }
 
-/* ───── reduced motion ───── */
+@media (max-width: 400px) {
+  .brand {
+    letter-spacing: 0.04em;
+  }
+
+  .links .row {
+    font-size: 17px;
+  }
+}
+
+/* ============================================
+   reduced motion
+   ============================================ */
 
 @media (prefers-reduced-motion: reduce) {
-  .stage {
+  .axis {
     animation: none;
   }
   .links a,
-  .arrow,
-  .links a::after {
+  .links .line::before,
+  .links .arrow,
+  .seal,
+  .mark span {
     transition: none;
   }
 }
