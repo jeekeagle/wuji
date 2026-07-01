@@ -136,64 +136,72 @@ body[data-theme="washi"] .card {
 
 body[data-theme="washi"] .content {
   padding: clamp(2rem, 4.5vw, 3.5rem) clamp(2.5rem, 5vw, 4rem);
-  display: grid;
-  grid-template-columns: 1.1fr 1fr;
-  gap: clamp(1.5rem, 3vw, 2.5rem);
-  align-items: center;
-}
-
-body[data-theme="washi"] .title {
-  font-family: var(--font-zh);
-  font-weight: 400;
-  font-size: clamp(28px, 3.4vw, 44px);
-  letter-spacing: 0.08em;
   display: flex;
-  align-items: baseline;
-  gap: 0.6em;
-  margin-bottom: 0.5em;
-  flex-wrap: wrap;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: clamp(1.4rem, 2.5vw, 2rem);
+  height: 100%;
 }
 
 body[data-theme="washi"] .content-head {
   display: flex;
   flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+body[data-theme="washi"] .title {
+  font-family: var(--font-en);
+  font-weight: 500;
+  font-size: clamp(36px, 5vw, 64px);
+  letter-spacing: 0.02em;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.4em;
+  margin: 0;
+  flex-wrap: wrap;
   justify-content: center;
-}
-
-body[data-theme="washi"] .content-body {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 0.3em;
-}
-
-body[data-theme="washi"] .title .zh {
-  color: var(--ink);
-}
-
-body[data-theme="washi"] .title .bar {
-  color: var(--ink-faint);
-  font-weight: 300;
-  font-size: 0.9em;
+  line-height: 1.05;
 }
 
 body[data-theme="washi"] .title .en {
   font-family: var(--font-en);
   font-style: italic;
-  font-weight: 400;
+  font-weight: 500;
+  font-size: 1em;
+  letter-spacing: 0.01em;
+  color: var(--ink);
+  text-transform: none;
+}
+
+body[data-theme="washi"] .title .bar {
+  color: var(--ink-faint);
+  font-weight: 300;
   font-size: 0.7em;
-  letter-spacing: 0.18em;
+}
+
+body[data-theme="washi"] .title .zh {
+  font-family: var(--font-zh);
+  font-weight: 400;
+  font-size: 0.78em;
+  letter-spacing: 0.12em;
   color: var(--ink-soft);
-  text-transform: uppercase;
 }
 
 body[data-theme="washi"] .subtitle {
   font-family: var(--font-zh);
-  font-size: clamp(13px, 1.3vw, 15px);
+  font-size: clamp(12px, 1.2vw, 14px);
   color: var(--ink-soft);
   letter-spacing: 0.35em;
-  margin-bottom: 0;
+  margin: 0;
   font-weight: 300;
+}
+
+body[data-theme="washi"] .links {
+  width: 100%;
+  max-width: 380px;
 }
 
 body[data-theme="washi"] .links a {
@@ -249,7 +257,7 @@ body[data-theme="washi"] .links a:hover .arrow {
 }
 
 body[data-theme="washi"] .signature {
-  margin-top: 2.5em;
+  margin-top: 0;
   font-family: var(--font-en);
   font-style: italic;
   font-size: 0.85em;
@@ -318,11 +326,14 @@ body[data-theme="handdrawn"] .card:hover {
 
 body[data-theme="handdrawn"] .content {
   padding: clamp(2rem, 4.5vw, 3.5rem) clamp(2.5rem, 5vw, 4rem);
-  display: grid;
-  grid-template-columns: 1.1fr 1fr;
-  gap: clamp(1.5rem, 3vw, 2.5rem);
+  display: flex;
+  flex-direction: column;
   align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: clamp(1.2rem, 2vw, 1.8rem);
   position: relative;
+  height: 100%;
 }
 
 /* 胶带效果 · 左上角 */
@@ -339,63 +350,69 @@ body[data-theme="handdrawn"] .content::before {
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
 }
 
-body[data-theme="handdrawn"] .title {
-  font-family: var(--font-zh);
-  font-weight: 700;
-  font-size: clamp(34px, 4vw, 50px);
-  letter-spacing: 0.02em;
-  display: flex;
-  align-items: baseline;
-  gap: 0.5em;
-  margin-bottom: 0.4em;
-  color: var(--ink);
-  flex-wrap: wrap;
-}
-
 body[data-theme="handdrawn"] .content-head {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
 }
 
-body[data-theme="handdrawn"] .title .zh {
+body[data-theme="handdrawn"] .title {
+  font-family: var(--font-en);
+  font-weight: 500;
+  font-size: clamp(38px, 5vw, 60px);
+  letter-spacing: 0.02em;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.4em;
+  margin: 0;
+  color: var(--ink);
+  flex-wrap: wrap;
+  justify-content: center;
+  line-height: 1.05;
+}
+
+body[data-theme="handdrawn"] .title .en {
+  font-family: var(--font-en);
+  font-style: italic;
+  font-weight: 500;
+  font-size: 1em;
+  letter-spacing: 0.01em;
+  color: var(--ink);
+  text-transform: none;
   display: inline-block;
-  transform: rotate(-2deg);
-}
-
-body[data-theme="handdrawn"] .content-body {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 0.5em;
+  transform: rotate(-1.5deg);
 }
 
 body[data-theme="handdrawn"] .title .bar {
   color: var(--accent);
   font-weight: 700;
-  font-size: 0.85em;
+  font-size: 0.7em;
 }
 
-body[data-theme="handdrawn"] .title .en {
-  font-family: var(--font-en);
-  font-weight: 400;
-  font-size: 0.62em;
-  letter-spacing: 0.1em;
-  color: var(--accent);
-  text-transform: uppercase;
+body[data-theme="handdrawn"] .title .zh {
+  font-family: var(--font-zh);
+  font-weight: 700;
+  font-size: 0.75em;
+  letter-spacing: 0.08em;
+  color: var(--ink);
   display: inline-block;
-  transform: rotate(1.5deg);
+  transform: rotate(1deg);
 }
 
 body[data-theme="handdrawn"] .subtitle {
   font-family: var(--font-zh);
-  font-size: clamp(14px, 1.5vw, 17px);
+  font-size: clamp(13px, 1.3vw, 15px);
   color: var(--ink-soft);
   letter-spacing: 0.05em;
-  margin-bottom: 0;
+  margin: 0;
   font-style: italic;
-  transform: rotate(0.3deg);
   display: inline-block;
+}
+
+body[data-theme="handdrawn"] .links {
+  width: 100%;
+  max-width: 360px;
 }
 
 body[data-theme="handdrawn"] .links a {
@@ -458,14 +475,13 @@ body[data-theme="handdrawn"] .links a:hover .arrow {
 }
 
 body[data-theme="handdrawn"] .signature {
-  margin-top: 2.5em;
+  margin-top: 0;
   font-family: var(--font-en);
   font-size: 0.9em;
   color: var(--ink-soft);
   letter-spacing: 0.02em;
   text-align: center;
-  transform: rotate(-0.5deg);
-  display: inline-block;
+  display: block;
   width: 100%;
 }
 
@@ -594,11 +610,6 @@ body[data-theme="handdrawn"] .theme-switcher .sep {
    ============================================ */
 
 @media (max-width: 720px) {
-  body[data-theme="washi"] .content,
-  body[data-theme="handdrawn"] .content {
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
-  }
   .card {
     min-height: 0;
   }
