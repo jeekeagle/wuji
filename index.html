@@ -14,18 +14,31 @@
 </head>
 <body>
 
-  <!-- Layer 1 · 静态纸张：feDiffuseLighting 把 noise 渲染成褶皱明暗 -->
+  <!-- Layer 1 · 静态纸张：双光斜射 + 纤维叠加，褶皱更具象 -->
   <svg class="paper-svg" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" aria-hidden="true">
     <defs>
       <filter id="paper" x="0%" y="0%" width="100%" height="100%">
+        <!-- 大尺度褶皱（低频） -->
         <feTurbulence type="fractalNoise" baseFrequency="0.012" numOctaves="3" seed="3" result="wrinkle"/>
+        <!-- 纸面纤维（高频） -->
         <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" seed="7" result="fiber"/>
-        <feDiffuseLighting in="wrinkle" lighting-color="#f5f0e6" surfaceScale="2.5" diffuseConstant="1.2" result="lit">
+
+        <!-- 主光：暖色，135°，制造亮面 -->
+        <feDiffuseLighting in="wrinkle" lighting-color="#f5f0e6" surfaceScale="3.2" diffuseConstant="1.2" result="litWarm">
           <feDistantLight azimuth="135" elevation="50"/>
         </feDiffuseLighting>
-        <feComposite in="fiber" in2="lit" operator="in" result="fiberOverlay"/>
+        <!-- 副光：冷色，315°，制造阴影对比 -->
+        <feDiffuseLighting in="wrinkle" lighting-color="#e8e0d0" surfaceScale="2.0" diffuseConstant="0.6" result="litCool">
+          <feDistantLight azimuth="315" elevation="35"/>
+        </feDiffuseLighting>
+
+        <!-- 冷暖光相加（k2=0.55 控制冷光权重，避免太灰） -->
+        <feComposite in="litCool" in2="litWarm" operator="arithmetic" k1="0" k2="0.55" k3="0.45" k4="0" result="paper"/>
+
+        <!-- 纤维纹理蒙在褶皱之上 -->
+        <feComposite in="fiber" in2="paper" operator="in" result="fiberOverlay"/>
         <feMerge>
-          <feMergeNode in="lit"/>
+          <feMergeNode in="paper"/>
           <feMergeNode in="fiberOverlay"/>
         </feMerge>
       </filter>

@@ -50,11 +50,12 @@ body {
   height: 100%;
   z-index: 0;
   pointer-events: none;
-  opacity: 0.65;
+  opacity: 0.72;
 }
 
 /* ============================================
    Layer 2 · Koushi 罫紙网格（静止）
+   32px 辅线 + 160px 主线（每 5 格一根），更接近真原稿纸
    ============================================ */
 
 .koushi {
@@ -63,14 +64,18 @@ body {
   z-index: 1;
   pointer-events: none;
   background-image:
+    /* 主线（160px，更明显） */
+    linear-gradient(to right, rgba(26, 26, 26, 0.10) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(26, 26, 26, 0.10) 1px, transparent 1px),
+    /* 辅线（32px，更淡） */
     linear-gradient(to right, var(--grid) 1px, transparent 1px),
     linear-gradient(to bottom, var(--grid) 1px, transparent 1px);
-  background-size: 32px 32px;
+  background-size: 160px 160px, 160px 160px, 32px 32px, 32px 32px;
 }
 
 /* ============================================
    Layer 3 · 动态光斑（缓慢漂浮）
-   三个 radial-gradient 位置循环
+   双周期（48s + 73s 不可约比）= 永不精确重复
    ============================================ */
 
 .drift {
@@ -79,23 +84,26 @@ body {
   z-index: 2;
   pointer-events: none;
   background:
-    radial-gradient(ellipse 40% 35% at 25% 25%, rgba(255, 240, 200, 0.28) 0%, transparent 60%),
-    radial-gradient(ellipse 35% 30% at 75% 75%, rgba(170, 150, 120, 0.20) 0%, transparent 60%),
-    radial-gradient(ellipse 30% 30% at 50% 50%, rgba(255, 245, 220, 0.18) 0%, transparent 60%);
+    radial-gradient(ellipse 42% 36% at 25% 25%, rgba(255, 240, 200, 0.30) 0%, transparent 60%),
+    radial-gradient(ellipse 38% 32% at 75% 75%, rgba(170, 150, 120, 0.22) 0%, transparent 60%),
+    radial-gradient(ellipse 32% 32% at 50% 50%, rgba(255, 245, 220, 0.20) 0%, transparent 60%);
   background-size: 250% 250%, 250% 250%, 250% 250%;
-  animation: drift 36s ease-in-out infinite;
+  animation:
+    driftA 48s ease-in-out infinite,
+    driftB 73s ease-in-out infinite;
 }
 
-@keyframes drift {
-  0%, 100% {
-    background-position: 25% 25%, 75% 75%, 50% 50%;
-  }
-  33% {
-    background-position: 35% 28%, 65% 72%, 45% 55%;
-  }
-  66% {
-    background-position: 20% 35%, 80% 65%, 55% 45%;
-  }
+/* 长周期：暖光主漂移（48s） */
+@keyframes driftA {
+  0%, 100% { background-position: 25% 25%, 75% 75%, 50% 50%; }
+  33%      { background-position: 35% 28%, 65% 72%, 45% 55%; }
+  66%      { background-position: 20% 35%, 80% 65%, 55% 45%; }
+}
+
+/* 短周期：冷光反向漂移（73s，质数，永不与 A 重合） */
+@keyframes driftB {
+  0%, 100% { background-position: 70% 30%, 30% 70%, 55% 45%; }
+  50%      { background-position: 60% 40%, 40% 60%, 45% 55%; }
 }
 
 /* ============================================
