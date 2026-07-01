@@ -1,22 +1,12 @@
-/* ========================================
-   无记 · wuji
-   Washi 褶皱 + Koushi 罫紙 + 动态光斑
-   ======================================== */
+/* ============================================
+   无记 · AVYAKATA
+   双主题：禅 (Washi) · 手绘 (Hand-Drawn)
+   ============================================ */
 
-:root {
-  --paper: #f5f0e6;
-  --ink: #1a1a1a;
-  --ink-soft: #6a6a6a;
-  --ink-faint: #9a948a;
-  --grid: rgba(26, 26, 26, 0.055);
-
-  --serif-cn: "Noto Serif SC", "Songti SC", "STSong", "SimSun", serif;
-  --serif-en: "Cormorant Garamond", "EB Garamond", Georgia, serif;
-
-  --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
-}
-
-* {
+/* ─── 重置 ─── */
+*,
+*::before,
+*::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
@@ -24,26 +14,68 @@
 
 html,
 body {
-  background: var(--paper);
-  color: var(--ink);
-  font-family: var(--serif-cn);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-rendering: optimizeLegibility;
-}
-
-body {
-  min-height: 100vh;
-  position: relative;
+  height: 100%;
+  width: 100%;
   overflow-x: hidden;
 }
 
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  transition: background-color 0.5s ease, color 0.5s ease;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
 /* ============================================
-   Layer 1 · 静态纸张纹理（褶皱 + 纤维）
-   feDiffuseLighting 把 noise 渲染成明暗
+   主题 1 · 禅 (Washi) · 当代和纸
    ============================================ */
 
-.paper-svg {
+body[data-theme="washi"] {
+  --bg: #f5f0e6;
+  --ink: #1a1a1a;
+  --ink-soft: rgba(26, 26, 26, 0.55);
+  --ink-faint: rgba(26, 26, 26, 0.25);
+  --line: rgba(26, 26, 26, 0.55);
+  --line-soft: rgba(26, 26, 26, 0.055);
+  --line-main: rgba(26, 26, 26, 0.10);
+  --card-bg: rgba(255, 253, 248, 0.55);
+  --card-border: rgba(26, 26, 26, 0.08);
+  --card-shadow: 0 30px 60px -20px rgba(60, 50, 30, 0.15),
+                 0 8px 24px -8px rgba(60, 50, 30, 0.10),
+                 inset 0 1px 0 rgba(255, 255, 255, 0.5);
+  --font-zh: "Noto Serif SC", "Songti SC", "STSong", serif;
+  --font-en: "Cormorant Garamond", "EB Garamond", Georgia, serif;
+  --font-ui: "Noto Serif SC", "Songti SC", serif;
+  background-color: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-zh);
+}
+
+body[data-theme="washi"] .paper-svg,
+body[data-theme="washi"] .koushi,
+body[data-theme="washi"] .drift {
+  display: block;
+}
+
+body[data-theme="washi"] .dot-bg {
+  display: none;
+}
+
+/* 静态 SVG · 褶皱 */
+body[data-theme="washi"] .paper-svg {
   position: fixed;
   inset: 0;
   width: 100%;
@@ -53,61 +85,362 @@ body {
   opacity: 0.82;
 }
 
-/* ============================================
-   Layer 2 · Koushi 罫紙网格（静止）
-   32px 辅线 + 160px 主线（每 5 格一根），更接近真原稿纸
-   ============================================ */
-
-.koushi {
+/* 罫紙网格 · 主辅线 */
+body[data-theme="washi"] .koushi {
   position: fixed;
   inset: 0;
   z-index: 1;
   pointer-events: none;
   background-image:
-    /* 主线（160px，更明显） */
-    linear-gradient(to right, rgba(26, 26, 26, 0.10) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(26, 26, 26, 0.10) 1px, transparent 1px),
-    /* 辅线（32px，更淡） */
-    linear-gradient(to right, var(--grid) 1px, transparent 1px),
-    linear-gradient(to bottom, var(--grid) 1px, transparent 1px);
+    linear-gradient(to right, var(--line-main) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--line-main) 1px, transparent 1px),
+    linear-gradient(to right, var(--line-soft) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--line-soft) 1px, transparent 1px);
   background-size: 160px 160px, 160px 160px, 32px 32px, 32px 32px;
 }
 
-/* ============================================
-   Layer 3 · 动态光斑（缓慢漂浮）
-   双周期（48s + 73s 不可约比）= 永不精确重复
-   ============================================ */
-
-.drift {
+/* 动态光斑 · 异周期 */
+body[data-theme="washi"] .drift {
   position: fixed;
   inset: 0;
   z-index: 2;
   pointer-events: none;
   background:
-    radial-gradient(ellipse 42% 36% at 25% 25%, rgba(255, 240, 200, 0.30) 0%, transparent 60%),
-    radial-gradient(ellipse 38% 32% at 75% 75%, rgba(170, 150, 120, 0.22) 0%, transparent 60%),
-    radial-gradient(ellipse 32% 32% at 50% 50%, rgba(255, 245, 220, 0.20) 0%, transparent 60%);
-  background-size: 250% 250%, 250% 250%, 250% 250%;
-  animation:
-    driftA 48s ease-in-out infinite,
-    driftB 73s ease-in-out infinite;
+    radial-gradient(ellipse 60% 50% at 25% 30%, rgba(255, 245, 220, 0.35), transparent 70%),
+    radial-gradient(ellipse 50% 40% at 75% 70%, rgba(245, 235, 210, 0.30), transparent 70%),
+    radial-gradient(ellipse 40% 35% at 55% 50%, rgba(255, 250, 235, 0.25), transparent 70%);
+  background-size: 220% 220%, 200% 200%, 240% 240%;
+  animation: driftA 48s ease-in-out infinite, driftB 73s ease-in-out infinite;
 }
 
-/* 长周期：暖光主漂移（48s） */
 @keyframes driftA {
-  0%, 100% { background-position: 25% 25%, 75% 75%, 50% 50%; }
-  33%      { background-position: 35% 28%, 65% 72%, 45% 55%; }
-  66%      { background-position: 20% 35%, 80% 65%, 55% 45%; }
+  0%, 100% { background-position: 25% 30%, 75% 70%, 55% 50%; }
+  33%      { background-position: 32% 25%, 68% 75%, 48% 55%; }
+  66%      { background-position: 22% 35%, 78% 65%, 60% 45%; }
 }
 
-/* 短周期：冷光反向漂移（73s，质数，永不与 A 重合） */
 @keyframes driftB {
-  0%, 100% { background-position: 70% 30%, 30% 70%, 55% 45%; }
-  50%      { background-position: 60% 40%, 40% 60%, 45% 55%; }
+  0%, 100% { background-position: 0% 0%, 100% 100%, 50% 50%; }
+  50%      { background-position: 5% 8%, 95% 92%, 52% 48%; }
+}
+
+/* 卡片 · 禅主题 · 毛玻璃 + 微妙边框 */
+body[data-theme="washi"] .card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 20px;
+  backdrop-filter: blur(20px) saturate(120%);
+  -webkit-backdrop-filter: blur(20px) saturate(120%);
+  box-shadow: var(--card-shadow);
+}
+
+body[data-theme="washi"] .content {
+  padding: clamp(2.5rem, 5vw, 4rem) clamp(2rem, 5vw, 3.5rem);
+}
+
+body[data-theme="washi"] .title {
+  font-family: var(--font-zh);
+  font-weight: 400;
+  font-size: clamp(28px, 3.4vw, 42px);
+  letter-spacing: 0.08em;
+  display: flex;
+  align-items: baseline;
+  gap: 0.6em;
+  margin-bottom: 0.8em;
+}
+
+body[data-theme="washi"] .title .zh {
+  color: var(--ink);
+}
+
+body[data-theme="washi"] .title .bar {
+  color: var(--ink-faint);
+  font-weight: 300;
+  font-size: 0.9em;
+}
+
+body[data-theme="washi"] .title .en {
+  font-family: var(--font-en);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 0.7em;
+  letter-spacing: 0.18em;
+  color: var(--ink-soft);
+  text-transform: uppercase;
+}
+
+body[data-theme="washi"] .subtitle {
+  font-family: var(--font-zh);
+  font-size: clamp(13px, 1.3vw, 15px);
+  color: var(--ink-soft);
+  letter-spacing: 0.35em;
+  margin-bottom: 2em;
+  font-weight: 300;
+}
+
+body[data-theme="washi"] .links a {
+  display: grid;
+  grid-template-columns: auto 1fr auto auto;
+  align-items: baseline;
+  column-gap: 1.2em;
+  padding: 0.9em 0;
+  border-top: 1px dashed var(--line-soft);
+  transition: color 0.3s ease;
+}
+
+body[data-theme="washi"] .links a:hover {
+  color: var(--ink);
+}
+
+body[data-theme="washi"] .links .leader {
+  width: 24px;
+  height: 1px;
+  background: var(--line);
+  transition: width 0.4s ease, background 0.3s ease;
+}
+
+body[data-theme="washi"] .links a:hover .leader {
+  width: 44px;
+  background: #8b1a1a;
+}
+
+body[data-theme="washi"] .links .label {
+  font-family: var(--font-zh);
+  font-size: clamp(16px, 1.6vw, 19px);
+  font-weight: 400;
+  letter-spacing: 0.05em;
+}
+
+body[data-theme="washi"] .links .desc {
+  font-family: var(--font-en);
+  font-style: italic;
+  font-size: 0.78em;
+  color: var(--ink-soft);
+  letter-spacing: 0.05em;
+}
+
+body[data-theme="washi"] .links .arrow {
+  font-size: 0.95em;
+  color: var(--ink-soft);
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+
+body[data-theme="washi"] .links a:hover .arrow {
+  transform: translate(2px, -2px);
+  color: #8b1a1a;
+}
+
+body[data-theme="washi"] .signature {
+  margin-top: 2.5em;
+  font-family: var(--font-en);
+  font-style: italic;
+  font-size: 0.85em;
+  color: var(--ink-faint);
+  letter-spacing: 0.05em;
+  text-align: center;
 }
 
 /* ============================================
-   Layer 4 · 主内容
+   主题 2 · 手绘 (Hand-Drawn) · 速写本
+   ============================================ */
+
+body[data-theme="handdrawn"] {
+  --bg: #fdf6e3;
+  --ink: #2d2823;
+  --ink-soft: rgba(45, 40, 35, 0.65);
+  --ink-faint: rgba(45, 40, 35, 0.35);
+  --line: rgba(45, 40, 35, 0.7);
+  --line-soft: rgba(45, 40, 35, 0.15);
+  --card-bg: #fff8e7;
+  --card-border: #2d2823;
+  --card-shadow: 6px 6px 0px rgba(45, 40, 35, 0.9);
+  --accent: #d2691e;
+  --font-zh: "Patrick Hand", "Kalam", "Comic Sans MS", cursive;
+  --font-en: "Kalam", "Patrick Hand", "Comic Sans MS", cursive;
+  --font-ui: "Kalam", "Patrick Hand", cursive;
+  background-color: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-zh);
+}
+
+body[data-theme="handdrawn"] .paper-svg,
+body[data-theme="handdrawn"] .koushi,
+body[data-theme="handdrawn"] .drift {
+  display: none;
+}
+
+body[data-theme="handdrawn"] .dot-bg {
+  display: block;
+}
+
+/* 笔记本点阵 */
+body[data-theme="handdrawn"] .dot-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image: radial-gradient(circle, rgba(45, 40, 35, 0.25) 1.2px, transparent 1.2px);
+  background-size: 24px 24px;
+  background-position: 0 0;
+}
+
+/* 卡片 · 手绘风 · 波浪边 + 硬阴影 + 旋转 */
+body[data-theme="handdrawn"] .card {
+  background: var(--card-bg);
+  border: 2.5px solid var(--card-border);
+  border-radius: 22px 26px 20px 28px / 24px 22px 28px 20px;
+  box-shadow: var(--card-shadow);
+  transform: rotate(-0.6deg);
+  transition: transform 0.3s ease;
+}
+
+body[data-theme="handdrawn"] .card:hover {
+  transform: rotate(-0.3deg) translateY(-2px);
+}
+
+body[data-theme="handdrawn"] .content {
+  padding: clamp(2.5rem, 5vw, 4rem) clamp(2rem, 5vw, 3.5rem);
+  position: relative;
+}
+
+/* 胶带效果 · 左上角 */
+body[data-theme="handdrawn"] .content::before {
+  content: "";
+  position: absolute;
+  top: -14px;
+  left: 30px;
+  width: 70px;
+  height: 22px;
+  background: rgba(255, 220, 130, 0.7);
+  border: 1px solid rgba(45, 40, 35, 0.2);
+  transform: rotate(-6deg);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+}
+
+body[data-theme="handdrawn"] .title {
+  font-family: var(--font-zh);
+  font-weight: 700;
+  font-size: clamp(34px, 4vw, 48px);
+  letter-spacing: 0.02em;
+  display: flex;
+  align-items: baseline;
+  gap: 0.5em;
+  margin-bottom: 0.6em;
+  color: var(--ink);
+}
+
+body[data-theme="handdrawn"] .title .zh {
+  display: inline-block;
+  transform: rotate(-2deg);
+}
+
+body[data-theme="handdrawn"] .title .bar {
+  color: var(--accent);
+  font-weight: 700;
+  font-size: 0.85em;
+}
+
+body[data-theme="handdrawn"] .title .en {
+  font-family: var(--font-en);
+  font-weight: 400;
+  font-size: 0.62em;
+  letter-spacing: 0.1em;
+  color: var(--accent);
+  text-transform: uppercase;
+  display: inline-block;
+  transform: rotate(1.5deg);
+}
+
+body[data-theme="handdrawn"] .subtitle {
+  font-family: var(--font-zh);
+  font-size: clamp(14px, 1.5vw, 17px);
+  color: var(--ink-soft);
+  letter-spacing: 0.05em;
+  margin-bottom: 2em;
+  font-style: italic;
+  transform: rotate(0.3deg);
+  display: inline-block;
+}
+
+body[data-theme="handdrawn"] .links a {
+  display: grid;
+  grid-template-columns: auto 1fr auto auto;
+  align-items: center;
+  column-gap: 1em;
+  padding: 0.85em 0;
+  border-top: 2px dashed var(--line-soft);
+  font-weight: 700;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+body[data-theme="handdrawn"] .links a:hover {
+  transform: translateX(4px) rotate(-0.5deg);
+  color: var(--accent);
+}
+
+body[data-theme="handdrawn"] .links .leader {
+  width: 28px;
+  height: 2px;
+  background: var(--ink);
+  position: relative;
+  transform: rotate(-1deg);
+}
+
+body[data-theme="handdrawn"] .links .leader::after {
+  content: "";
+  position: absolute;
+  right: -4px;
+  top: -2px;
+  width: 6px;
+  height: 6px;
+  background: var(--ink);
+  border-radius: 50%;
+}
+
+body[data-theme="handdrawn"] .links .label {
+  font-family: var(--font-zh);
+  font-size: clamp(17px, 1.7vw, 20px);
+  letter-spacing: 0.02em;
+}
+
+body[data-theme="handdrawn"] .links .desc {
+  font-family: var(--font-en);
+  font-size: 0.8em;
+  color: var(--ink-soft);
+  letter-spacing: 0.02em;
+}
+
+body[data-theme="handdrawn"] .links .arrow {
+  font-size: 1.1em;
+  color: var(--accent);
+  font-weight: 700;
+  transition: transform 0.2s ease;
+}
+
+body[data-theme="handdrawn"] .links a:hover .arrow {
+  transform: translate(3px, -3px) rotate(15deg);
+}
+
+body[data-theme="handdrawn"] .signature {
+  margin-top: 2.5em;
+  font-family: var(--font-en);
+  font-size: 0.9em;
+  color: var(--ink-soft);
+  letter-spacing: 0.02em;
+  text-align: center;
+  transform: rotate(-0.5deg);
+  display: inline-block;
+  width: 100%;
+}
+
+body[data-theme="handdrawn"] .signature::before,
+body[data-theme="handdrawn"] .signature::after {
+  content: " ✦ ";
+  color: var(--accent);
+}
+
+/* ============================================
+   共享布局
    ============================================ */
 
 .stage {
@@ -116,16 +449,12 @@ body {
   min-height: 100vh;
   display: flex;
   align-items: center;
-  padding: 6rem 1.5rem;
+  justify-content: center;
+  padding: clamp(4rem, 8vh, 6rem) clamp(1.5rem, 5vw, 3rem);
+  animation: fadeUp 0.8s ease-out both;
 }
 
-.content {
-  margin-left: clamp(2rem, 9vw, 12rem);
-  max-width: 520px;
-  animation: enter 1.6s var(--ease) both;
-}
-
-@keyframes enter {
+@keyframes fadeUp {
   from {
     opacity: 0;
     transform: translateY(8px);
@@ -136,176 +465,120 @@ body {
   }
 }
 
-/* ── Title ── */
+.card {
+  width: 100%;
+  max-width: 480px;
+  position: relative;
+}
 
-.title {
+.content {
+  position: relative;
+  z-index: 2;
+}
+
+/* ============================================
+   左下角主题切换器
+   ============================================ */
+
+.theme-switcher {
+  position: fixed;
+  left: clamp(1.2rem, 2.5vw, 2rem);
+  bottom: clamp(1.2rem, 2.5vw, 2rem);
+  z-index: 100;
   display: flex;
-  align-items: baseline;
-  gap: 0.55em;
-  font-size: clamp(24px, 2.6vw, 32px);
-  font-weight: 400;
-  letter-spacing: 0.04em;
-  line-height: 1.2;
-  color: var(--ink);
-  margin-bottom: 0.7rem;
-}
-
-.title .zh {
-  font-family: var(--serif-cn);
-  font-weight: 400;
-  letter-spacing: 0.06em;
-}
-
-.title .bar {
-  color: var(--ink-faint);
-  font-weight: 200;
-  font-size: 0.95em;
-  margin: 0 -0.05em;
+  align-items: center;
+  gap: 0.6em;
+  font-size: 12px;
+  letter-spacing: 0.15em;
   user-select: none;
 }
 
-.title .en {
-  font-family: var(--serif-en);
-  letter-spacing: 0.22em;
-  font-weight: 400;
-  font-size: 0.7em;
-  color: var(--ink-soft);
-  text-transform: uppercase;
-}
-
-/* ── Subtitle ── */
-
-.subtitle {
-  font-family: var(--serif-cn);
-  font-size: clamp(13px, 1.2vw, 15px);
-  color: var(--ink-soft);
-  letter-spacing: 0.42em;
-  text-indent: 0.42em;
-  font-weight: 400;
-  margin-bottom: 4rem;
-}
-
-/* ── Links ── */
-
-.links {
-  display: flex;
-  flex-direction: column;
-  gap: 1.4rem;
-  max-width: 420px;
-}
-
-.links a {
-  display: grid;
-  grid-template-columns: auto auto 1fr auto;
-  align-items: baseline;
-  gap: 0.9rem;
-  text-decoration: none;
-  padding: 0.5rem 0;
-  transition: transform 0.5s var(--ease);
-}
-
-.links a:hover {
-  transform: translateX(4px);
-}
-
-.links .leader {
-  display: inline-block;
-  width: 24px;
-  height: 1px;
-  background: var(--ink-faint);
-  margin-bottom: 5px;
-  transition: width 0.5s var(--ease), background 0.5s var(--ease);
-}
-
-.links a:hover .leader {
-  width: 44px;
-  background: var(--ink);
-}
-
-.links .label {
-  font-family: var(--serif-cn);
-  font-size: 16px;
-  color: var(--ink);
-  letter-spacing: 0.16em;
-  font-weight: 400;
-}
-
-.links .desc {
-  font-family: var(--serif-en);
+.theme-switcher button {
+  padding: 0.4em 0.8em;
+  font-family: inherit;
   font-size: 12px;
-  color: var(--ink-faint);
-  font-style: italic;
-  letter-spacing: 0.04em;
-  justify-self: start;
+  letter-spacing: 0.15em;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  opacity: 0.45;
 }
 
-.links .arrow {
-  color: var(--ink-faint);
-  font-size: 14px;
-  transition: transform 0.4s var(--ease), color 0.4s ease;
+.theme-switcher button:hover {
+  opacity: 0.85;
 }
 
-.links a:hover .arrow {
-  transform: translate(2px, -2px);
+.theme-switcher button[aria-pressed="true"] {
+  opacity: 1;
+  font-weight: 700;
+}
+
+/* Washi 主题下的切换器 */
+body[data-theme="washi"] .theme-switcher {
+  color: var(--ink-soft);
+}
+
+body[data-theme="washi"] .theme-switcher button[aria-pressed="true"] {
   color: var(--ink);
+  background: rgba(26, 26, 26, 0.06);
+}
+
+body[data-theme="washi"] .theme-switcher .sep {
+  color: var(--ink-faint);
+}
+
+/* Hand-Drawn 主题下的切换器 */
+body[data-theme="handdrawn"] .theme-switcher {
+  color: var(--ink);
+  font-family: var(--font-ui);
+}
+
+body[data-theme="handdrawn"] .theme-switcher button[aria-pressed="true"] {
+  color: var(--accent);
+  background: rgba(210, 105, 30, 0.1);
+  border: 1.5px solid var(--accent);
+  transform: rotate(-1.5deg);
+}
+
+body[data-theme="handdrawn"] .theme-switcher button[aria-pressed="false"] {
+  border: 1.5px dashed var(--ink-soft);
+}
+
+body[data-theme="handdrawn"] .theme-switcher .sep {
+  color: var(--ink-faint);
+  font-weight: 700;
 }
 
 /* ============================================
-   Responsive
+   响应式
    ============================================ */
 
-@media (max-width: 800px) {
-  .stage {
-    padding: 4rem 1.5rem;
-  }
-
-  .content {
-    margin-left: 1.5rem;
-    margin-right: 1.5rem;
-    max-width: none;
-  }
-
+@media (max-width: 600px) {
   .title {
-    font-size: 22px;
-    gap: 0.45em;
+    gap: 0.35em;
   }
-
-  .title .en {
-    font-size: 0.65em;
+  .links a {
+    grid-template-columns: auto 1fr auto;
   }
-
-  .subtitle {
-    font-size: 12px;
-    letter-spacing: 0.35em;
-    margin-bottom: 3rem;
+  .links .desc {
+    grid-column: 2 / 4;
+    font-size: 0.7em;
+    margin-top: 0.2em;
   }
-
-  .links {
-    max-width: none;
+  .theme-switcher {
+    font-size: 11px;
   }
 }
 
-@media (max-width: 400px) {
-  .title {
-    flex-wrap: wrap;
-    font-size: 20px;
-  }
-}
-
-/* ============================================
-   Reduced motion · 静止一切动画
-   ============================================ */
-
+/* 用户偏好：减少动效 */
 @media (prefers-reduced-motion: reduce) {
-  .drift {
-    animation: none;
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
-  .content {
+  body[data-theme="washi"] .drift {
     animation: none;
-  }
-  .links a,
-  .links .leader,
-  .links .arrow {
-    transition: none;
   }
 }
