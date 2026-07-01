@@ -157,7 +157,7 @@ body[data-theme="washi"] .content-head {
 body[data-theme="washi"] .title {
   font-family: var(--font-zh);
   font-weight: 400;
-  font-size: clamp(14px, 1.4vw, 18px);
+  font-size: clamp(13px, 1.3vw, 17px);
   letter-spacing: 0.32em;
   display: inline-flex;
   align-items: center;
@@ -165,14 +165,14 @@ body[data-theme="washi"] .title {
   margin: 0;
   flex-wrap: wrap;
   justify-content: center;
-  line-height: 1.2;
-  color: var(--ink-soft);
+  line-height: 1.3;
+  color: var(--ink);
 }
 
 body[data-theme="washi"] .title::before,
 body[data-theme="washi"] .title::after {
   content: "";
-  width: clamp(24px, 3vw, 40px);
+  width: clamp(20px, 2.4vw, 32px);
   height: 1px;
   background: var(--ink-faint);
   flex-shrink: 0;
@@ -180,26 +180,10 @@ body[data-theme="washi"] .title::after {
 
 body[data-theme="washi"] .title .name {
   font-family: var(--font-zh);
-  font-weight: 500;
-  font-size: 1em;
-  letter-spacing: 0.06em;
-  color: var(--ink);
-  font-style: normal;
-  text-transform: none;
-}
-
-body[data-theme="washi"] .title .bar {
-  color: var(--ink-faint);
-  font-weight: 300;
-  font-size: 0.85em;
-}
-
-body[data-theme="washi"] .title .alias {
-  font-family: var(--font-zh);
   font-weight: 400;
   font-size: 1em;
   letter-spacing: 0.18em;
-  color: var(--ink-soft);
+  color: var(--ink);
   font-style: normal;
   text-transform: none;
 }
@@ -379,13 +363,13 @@ body[data-theme="terminal"] .content-head {
 body[data-theme="terminal"] .title {
   font-family: var(--font-ui);
   font-weight: 500;
-  font-size: clamp(13px, 1.3vw, 16px);
+  font-size: clamp(12px, 1.2vw, 15px);
   letter-spacing: 0.15em;
   display: block;
   margin: 0;
   color: var(--ink);
   text-transform: none;
-  line-height: 1.4;
+  line-height: 1.5;
   text-align: left;
 }
 
@@ -393,25 +377,7 @@ body[data-theme="terminal"] .title .name {
   font-family: var(--font-ui);
   font-weight: 500;
   font-size: 1em;
-  letter-spacing: 0.05em;
-  color: var(--ink-soft);
-  text-shadow: 0 0 4px rgba(51, 255, 0, 0.35);
-  font-style: normal;
-  text-transform: none;
-}
-
-body[data-theme="terminal"] .title .bar {
-  color: var(--ink-faint);
-  font-weight: 400;
-  font-size: 1em;
-  margin: 0 0.4em;
-}
-
-body[data-theme="terminal"] .title .alias {
-  font-family: var(--font-ui);
-  font-weight: 500;
-  font-size: 1em;
-  letter-spacing: 0.15em;
+  letter-spacing: 0.1em;
   color: var(--ink-soft);
   text-shadow: 0 0 4px rgba(51, 255, 0, 0.35);
   font-style: normal;
@@ -427,13 +393,8 @@ body[data-theme="terminal"] .title::before {
   text-shadow: 0 0 4px rgba(255, 176, 0, 0.4);
 }
 
-/* 输出 · > */
-body[data-theme="terminal"] .title::after {
-  content: "";
-}
-
 /* 光标 · 闪烁 */
-body[data-theme="terminal"] .title .alias::after {
+body[data-theme="terminal"] .title .name::after {
   content: "█";
   display: inline-block;
   margin-left: 0.2em;
@@ -694,8 +655,8 @@ body[data-theme="handdrawn"] .content-head {
 body[data-theme="handdrawn"] .title {
   font-family: var(--font-zh);
   font-weight: 700;
-  font-size: clamp(14px, 1.4vw, 18px);
-  letter-spacing: 0.18em;
+  font-size: clamp(13px, 1.3vw, 17px);
+  letter-spacing: 0.2em;
   display: inline-flex;
   align-items: center;
   gap: 0.8em;
@@ -703,35 +664,19 @@ body[data-theme="handdrawn"] .title {
   color: var(--ink);
   flex-wrap: wrap;
   justify-content: center;
-  line-height: 1.2;
+  line-height: 1.3;
 }
 
 body[data-theme="handdrawn"] .title::before,
 body[data-theme="handdrawn"] .title::after {
   content: "";
-  width: clamp(20px, 2.5vw, 32px);
-  height: 2px;
+  width: clamp(18px, 2.2vw, 28px);
+  height: 1.5px;
   background: var(--ink);
   flex-shrink: 0;
 }
 
 body[data-theme="handdrawn"] .title .name {
-  font-family: var(--font-zh);
-  font-weight: 700;
-  font-size: 1em;
-  letter-spacing: 0.1em;
-  color: var(--ink);
-  font-style: normal;
-  text-transform: none;
-}
-
-body[data-theme="handdrawn"] .title .bar {
-  color: var(--accent);
-  font-weight: 700;
-  font-size: 0.85em;
-}
-
-body[data-theme="handdrawn"] .title .alias {
   font-family: var(--font-zh);
   font-weight: 700;
   font-size: 1em;
@@ -1040,11 +985,11 @@ body[data-theme="newsprint"] .edition {
 
 /* 标题 · Playfair Display 大衬线 */
 body[data-theme="newsprint"] .title {
-  font-family: var(--font-display);
-  font-weight: 900;
-  font-size: clamp(36px, 4.6vw, 60px);
-  letter-spacing: -0.02em;
-  line-height: 1.0;
+  font-family: var(--font-zh);
+  font-weight: 500;
+  font-size: clamp(13px, 1.4vw, 18px);
+  letter-spacing: 0.18em;
+  line-height: 1.3;
   margin: 0;
   color: var(--ink);
   text-transform: none;
@@ -1054,30 +999,11 @@ body[data-theme="newsprint"] .title {
 
 body[data-theme="newsprint"] .title .name {
   font-family: var(--font-zh);
-  font-weight: 700;
-  font-size: 0.7em;
-  letter-spacing: 0.05em;
+  font-weight: 500;
+  font-size: 1em;
+  letter-spacing: 0.18em;
   color: var(--ink);
   font-style: normal;
-  vertical-align: 0.2em;
-  margin-right: 0.3em;
-}
-
-body[data-theme="newsprint"] .title .bar {
-  color: var(--red);
-  font-weight: 700;
-  font-size: 0.6em;
-  vertical-align: 0.2em;
-  margin: 0 0.2em;
-}
-
-body[data-theme="newsprint"] .title .alias {
-  font-family: var(--font-display);
-  font-weight: 900;
-  font-size: 1em;
-  letter-spacing: -0.02em;
-  color: var(--ink);
-  font-style: italic;
   text-transform: none;
 }
 
@@ -1085,22 +1011,22 @@ body[data-theme="newsprint"] .title .alias {
 body[data-theme="newsprint"] .title::after {
   content: "";
   display: block;
-  width: 56px;
-  height: 4px;
+  width: 36px;
+  height: 2px;
   background: var(--red);
-  margin-top: 0.7rem;
+  margin-top: 0.5rem;
 }
 
 /* 副标题 · Lora italic */
 body[data-theme="newsprint"] .subtitle {
-  font-family: var(--font-body);
-  font-size: clamp(15px, 1.6vw, 18px);
+  font-family: var(--font-display);
+  font-size: clamp(24px, 2.6vw, 36px);
   color: var(--ink);
-  letter-spacing: 0.02em;
+  letter-spacing: -0.01em;
   margin: 0;
   font-style: italic;
-  font-weight: 400;
-  line-height: 1.5;
+  font-weight: 700;
+  line-height: 1.2;
 }
 
 /* 链接 · 报纸"目录"风格 */
