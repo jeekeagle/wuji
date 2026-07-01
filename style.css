@@ -1,20 +1,15 @@
 /* ========================================
    无记 · wuji
-   Washi + Koushi grid · 当代禅意
+   Washi 褶皱 + Koushi 罫紙 + 动态光斑
    ======================================== */
 
 :root {
-  /* 和纸与墨 */
   --paper: #f5f0e6;
-  --paper-warm: #efe7d6;
   --ink: #1a1a1a;
   --ink-soft: #6a6a6a;
   --ink-faint: #9a948a;
-
-  /* 罫紙网格线 */
   --grid: rgba(26, 26, 26, 0.055);
 
-  /* 字体 */
   --serif-cn: "Noto Serif SC", "Songti SC", "STSong", "SimSun", serif;
   --serif-en: "Cormorant Garamond", "EB Garamond", Georgia, serif;
 
@@ -44,40 +39,67 @@ body {
 }
 
 /* ============================================
-   Layer 1 · Washi 纸张纹理
-   feTurbulence 模拟纤维感，multiply 混合
+   Layer 1 · 静态纸张纹理（褶皱 + 纤维）
+   feDiffuseLighting 把 noise 渲染成明暗
    ============================================ */
 
-body::before {
-  content: "";
+.paper-svg {
   position: fixed;
   inset: 0;
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='400' height='400'><filter id='paper'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' seed='3'/><feColorMatrix values='0 0 0 0 0.55  0 0 0 0 0.50  0 0 0 0 0.42  0 0 0 0.18 0'/></filter><rect width='100%' height='100%' filter='url(%23paper)'/></svg>");
+  width: 100%;
+  height: 100%;
+  z-index: 0;
   pointer-events: none;
-  z-index: 1;
-  opacity: 0.55;
-  mix-blend-mode: multiply;
+  opacity: 0.65;
 }
 
 /* ============================================
-   Layer 2 · Koushi 罫紙网格
-   32px × 32px 浅灰细线
+   Layer 2 · Koushi 罫紙网格（静止）
    ============================================ */
 
-body::after {
-  content: "";
+.koushi {
   position: fixed;
   inset: 0;
+  z-index: 1;
+  pointer-events: none;
   background-image:
     linear-gradient(to right, var(--grid) 1px, transparent 1px),
     linear-gradient(to bottom, var(--grid) 1px, transparent 1px);
   background-size: 32px 32px;
-  pointer-events: none;
-  z-index: 2;
 }
 
 /* ============================================
-   Stage · 垂直居中 + 略向左偏移
+   Layer 3 · 动态光斑（缓慢漂浮）
+   三个 radial-gradient 位置循环
+   ============================================ */
+
+.drift {
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 40% 35% at 25% 25%, rgba(255, 240, 200, 0.28) 0%, transparent 60%),
+    radial-gradient(ellipse 35% 30% at 75% 75%, rgba(170, 150, 120, 0.20) 0%, transparent 60%),
+    radial-gradient(ellipse 30% 30% at 50% 50%, rgba(255, 245, 220, 0.18) 0%, transparent 60%);
+  background-size: 250% 250%, 250% 250%, 250% 250%;
+  animation: drift 36s ease-in-out infinite;
+}
+
+@keyframes drift {
+  0%, 100% {
+    background-position: 25% 25%, 75% 75%, 50% 50%;
+  }
+  33% {
+    background-position: 35% 28%, 65% 72%, 45% 55%;
+  }
+  66% {
+    background-position: 20% 35%, 80% 65%, 55% 45%;
+  }
+}
+
+/* ============================================
+   Layer 4 · 主内容
    ============================================ */
 
 .stage {
@@ -106,9 +128,7 @@ body::after {
   }
 }
 
-/* ============================================
-   Title · "无记 | AVYAKATA"
-   ============================================ */
+/* ── Title ── */
 
 .title {
   display: flex;
@@ -145,9 +165,7 @@ body::after {
   text-transform: uppercase;
 }
 
-/* ============================================
-   Subtitle · "记录 · 而获得自己"
-   ============================================ */
+/* ── Subtitle ── */
 
 .subtitle {
   font-family: var(--serif-cn);
@@ -159,9 +177,7 @@ body::after {
   margin-bottom: 4rem;
 }
 
-/* ============================================
-   Links · 导航链接
-   ============================================ */
+/* ── Links ── */
 
 .links {
   display: flex;
@@ -269,10 +285,13 @@ body::after {
 }
 
 /* ============================================
-   Reduced motion
+   Reduced motion · 静止一切动画
    ============================================ */
 
 @media (prefers-reduced-motion: reduce) {
+  .drift {
+    animation: none;
+  }
   .content {
     animation: none;
   }

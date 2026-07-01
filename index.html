@@ -13,6 +13,33 @@
   <link rel="stylesheet" href="./style.css" />
 </head>
 <body>
+
+  <!-- Layer 1 · 静态纸张：feDiffuseLighting 把 noise 渲染成褶皱明暗 -->
+  <svg class="paper-svg" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" aria-hidden="true">
+    <defs>
+      <filter id="paper" x="0%" y="0%" width="100%" height="100%">
+        <feTurbulence type="fractalNoise" baseFrequency="0.012" numOctaves="3" seed="3" result="wrinkle"/>
+        <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" seed="7" result="fiber"/>
+        <feDiffuseLighting in="wrinkle" lighting-color="#f5f0e6" surfaceScale="2.5" diffuseConstant="1.2" result="lit">
+          <feDistantLight azimuth="135" elevation="50"/>
+        </feDiffuseLighting>
+        <feComposite in="fiber" in2="lit" operator="in" result="fiberOverlay"/>
+        <feMerge>
+          <feMergeNode in="lit"/>
+          <feMergeNode in="fiberOverlay"/>
+        </feMerge>
+      </filter>
+    </defs>
+    <rect width="100%" height="100%" filter="url(#paper)"/>
+  </svg>
+
+  <!-- Layer 2 · 罫紙网格（静止） -->
+  <div class="koushi" aria-hidden="true"></div>
+
+  <!-- Layer 3 · 动态光斑（缓慢漂浮） -->
+  <div class="drift" aria-hidden="true"></div>
+
+  <!-- Layer 4 · 主内容 -->
   <main class="stage">
     <div class="content">
       <h1 class="title">
