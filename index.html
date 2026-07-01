@@ -14,28 +14,33 @@
 </head>
 <body>
 
-  <!-- Layer 1 · 静态纸张：双光斜射 + 纤维叠加，褶皱更具象 -->
+  <!-- Layer 1 · 静态纸张：大褶皱 + 中褶皱 + 纤维，三层叠加 -->
   <svg class="paper-svg" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" aria-hidden="true">
     <defs>
       <filter id="paper" x="0%" y="0%" width="100%" height="100%">
-        <!-- 大尺度褶皱（低频） -->
-        <feTurbulence type="fractalNoise" baseFrequency="0.012" numOctaves="3" seed="3" result="wrinkle"/>
-        <!-- 纸面纤维（高频） -->
-        <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" seed="7" result="fiber"/>
+        <!-- 大褶皱：baseFrequency 0.0035 ≈ 特征尺寸 280px -->
+        <feTurbulence type="fractalNoise" baseFrequency="0.0035" numOctaves="2" seed="3" result="wrinkleBig"/>
+        <!-- 中褶皱：baseFrequency 0.014 ≈ 特征尺寸 70px -->
+        <feTurbulence type="fractalNoise" baseFrequency="0.014" numOctaves="2" seed="7" result="wrinkleMid"/>
+        <!-- 纸面纤维：baseFrequency 0.65 ≈ 特征尺寸 1.5px -->
+        <feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="1" seed="11" result="fiber"/>
 
-        <!-- 主光：暖色，135°，制造亮面 -->
-        <feDiffuseLighting in="wrinkle" lighting-color="#f5f0e6" surfaceScale="3.2" diffuseConstant="1.2" result="litWarm">
-          <feDistantLight azimuth="135" elevation="50"/>
+        <!-- 合并大+中褶皱作为高度图（大 60% + 中 40%） -->
+        <feComposite in="wrinkleMid" in2="wrinkleBig" operator="arithmetic" k1="0" k2="0.4" k3="0.6" result="wrinkle"/>
+
+        <!-- 主光：暖色，斜射，surfaceScale 4.5 让褶皱立体 -->
+        <feDiffuseLighting in="wrinkle" lighting-color="#f5f0e6" surfaceScale="4.5" diffuseConstant="1.2" result="litWarm">
+          <feDistantLight azimuth="135" elevation="55"/>
         </feDiffuseLighting>
-        <!-- 副光：冷色，315°，制造阴影对比 -->
-        <feDiffuseLighting in="wrinkle" lighting-color="#e8e0d0" surfaceScale="2.0" diffuseConstant="0.6" result="litCool">
-          <feDistantLight azimuth="315" elevation="35"/>
+        <!-- 副光：冷色，背光，做阴影 -->
+        <feDiffuseLighting in="wrinkle" lighting-color="#d8d0c0" surfaceScale="2.8" diffuseConstant="0.7" result="litCool">
+          <feDistantLight azimuth="315" elevation="32"/>
         </feDiffuseLighting>
 
-        <!-- 冷暖光相加（k2=0.55 控制冷光权重，避免太灰） -->
-        <feComposite in="litCool" in2="litWarm" operator="arithmetic" k1="0" k2="0.55" k3="0.45" k4="0" result="paper"/>
+        <!-- 暖 60% + 冷 40%，整体偏亮 -->
+        <feComposite in="litCool" in2="litWarm" operator="arithmetic" k1="0" k2="0.4" k3="0.6" k4="0" result="paper"/>
 
-        <!-- 纤维纹理蒙在褶皱之上 -->
+        <!-- 纤维蒙在褶皱之上 -->
         <feComposite in="fiber" in2="paper" operator="in" result="fiberOverlay"/>
         <feMerge>
           <feMergeNode in="paper"/>
