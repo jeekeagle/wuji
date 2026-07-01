@@ -1,0 +1,192 @@
+/* ========================================
+   无记 · wuji
+   ======================================== */
+
+:root {
+  --bg: #f7f5f0;
+  --ink: #1a1a1a;
+  --ink-soft: #888;
+  --ink-faint: #c0bab0;
+  --accent: #8b1a1a;
+
+  --serif-cn: "Noto Serif SC", "Songti SC", "STSong", "SimSun", serif;
+  --serif-en: "Cormorant Garamond", "EB Garamond", Georgia, serif;
+
+  --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--serif-cn);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ───── stage ───── */
+
+.stage {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 1.5rem;
+  gap: 2.5rem;
+  animation: rise 1.4s var(--ease) both;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ───── brand ───── */
+
+.brand {
+  font-family: var(--serif-cn);
+  font-size: clamp(72px, 14vw, 144px);
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  line-height: 1;
+  display: flex;
+  gap: 0.15em;
+}
+
+.ink-accent {
+  color: var(--accent);
+}
+
+/* ───── subtitle ───── */
+
+.subtitle {
+  font-family: var(--serif-en);
+  font-size: clamp(14px, 1.4vw, 18px);
+  color: var(--ink-soft);
+  letter-spacing: 0.4em;
+  text-indent: 0.4em;
+  font-weight: 400;
+  font-style: italic;
+}
+
+/* ───── divider ───── */
+
+.divider {
+  display: block;
+  width: 60px;
+  height: 1px;
+  background: var(--ink-faint);
+  margin: 0.5rem 0;
+}
+
+/* ───── links ───── */
+
+.links {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.links a {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8rem;
+  font-family: var(--serif-cn);
+  font-size: 18px;
+  color: var(--ink);
+  text-decoration: none;
+  padding: 0.5rem 0.4rem 0.5rem 0;
+  transition: transform 0.5s var(--ease);
+}
+
+.links a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 1px;
+  width: 0;
+  background: var(--ink);
+  transition: width 0.5s var(--ease);
+}
+
+.links a:hover {
+  transform: translateX(6px);
+}
+
+.links a:hover::after {
+  width: calc(100% - 1.6rem);
+}
+
+.arrow {
+  color: var(--ink-soft);
+  font-size: 14px;
+  transition: transform 0.5s var(--ease), color 0.5s ease;
+}
+
+.links a:hover .arrow {
+  transform: translateX(4px);
+  color: var(--ink);
+}
+
+/* ───── footer ───── */
+
+.foot {
+  padding: 2rem 1.5rem;
+  text-align: center;
+  font-family: var(--serif-en);
+  font-size: 12px;
+  color: var(--ink-soft);
+  letter-spacing: 0.3em;
+  text-indent: 0.3em;
+}
+
+/* ───── responsive ───── */
+
+@media (max-width: 600px) {
+  .stage {
+    padding: 3rem 1.5rem;
+    gap: 2rem;
+  }
+  .brand {
+    letter-spacing: 0.05em;
+    gap: 0.08em;
+  }
+  .links a {
+    font-size: 16px;
+  }
+}
+
+/* ───── reduced motion ───── */
+
+@media (prefers-reduced-motion: reduce) {
+  .stage {
+    animation: none;
+  }
+  .links a,
+  .arrow,
+  .links a::after {
+    transition: none;
+  }
+}
