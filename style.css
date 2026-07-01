@@ -150,21 +150,31 @@ body[data-theme="washi"] .content-head {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.6rem;
+  gap: 1.5rem;
 }
 
 body[data-theme="washi"] .title {
   font-family: var(--font-zh);
-  font-weight: 500;
-  font-size: clamp(32px, 4.4vw, 56px);
-  letter-spacing: 0.05em;
+  font-weight: 400;
+  font-size: clamp(14px, 1.4vw, 18px);
+  letter-spacing: 0.32em;
   display: inline-flex;
-  align-items: baseline;
-  gap: 0.4em;
+  align-items: center;
+  gap: 0.9em;
   margin: 0;
   flex-wrap: wrap;
   justify-content: center;
-  line-height: 1.1;
+  line-height: 1.2;
+  color: var(--ink-soft);
+}
+
+body[data-theme="washi"] .title::before,
+body[data-theme="washi"] .title::after {
+  content: "";
+  width: clamp(24px, 3vw, 40px);
+  height: 1px;
+  background: var(--ink-faint);
+  flex-shrink: 0;
 }
 
 body[data-theme="washi"] .title .name {
@@ -180,14 +190,14 @@ body[data-theme="washi"] .title .name {
 body[data-theme="washi"] .title .bar {
   color: var(--ink-faint);
   font-weight: 300;
-  font-size: 0.7em;
+  font-size: 0.85em;
 }
 
 body[data-theme="washi"] .title .alias {
   font-family: var(--font-zh);
   font-weight: 400;
-  font-size: 0.82em;
-  letter-spacing: 0.15em;
+  font-size: 1em;
+  letter-spacing: 0.18em;
   color: var(--ink-soft);
   font-style: normal;
   text-transform: none;
@@ -195,8 +205,8 @@ body[data-theme="washi"] .title .alias {
 
 body[data-theme="washi"] .subtitle {
   font-family: var(--font-zh);
-  font-size: clamp(12px, 1.2vw, 14px);
-  color: var(--ink-soft);
+  font-size: clamp(20px, 2.2vw, 28px);
+  color: var(--ink);
   letter-spacing: 0.35em;
   margin: 0;
   font-weight: 300;
@@ -360,15 +370,15 @@ body[data-theme="terminal"] .content {
 body[data-theme="terminal"] .content-head {
   display: flex;
   flex-direction: column;
-  gap: 0.6rem;
+  gap: 1.2rem;
 }
 
 /* 标题 · 提示符 + 终端字体 */
 body[data-theme="terminal"] .title {
   font-family: var(--font-ui);
-  font-weight: 700;
-  font-size: clamp(20px, 2.4vw, 28px);
-  letter-spacing: 0.05em;
+  font-weight: 500;
+  font-size: clamp(13px, 1.3vw, 16px);
+  letter-spacing: 0.15em;
   display: block;
   margin: 0;
   color: var(--ink);
@@ -379,11 +389,11 @@ body[data-theme="terminal"] .title {
 
 body[data-theme="terminal"] .title .name {
   font-family: var(--font-ui);
-  font-weight: 700;
+  font-weight: 500;
   font-size: 1em;
   letter-spacing: 0.05em;
-  color: var(--ink);
-  text-shadow: 0 0 5px rgba(51, 255, 0, 0.5);
+  color: var(--ink-soft);
+  text-shadow: 0 0 4px rgba(51, 255, 0, 0.35);
   font-style: normal;
   text-transform: none;
 }
@@ -397,20 +407,27 @@ body[data-theme="terminal"] .title .bar {
 
 body[data-theme="terminal"] .title .alias {
   font-family: var(--font-ui);
-  font-weight: 700;
+  font-weight: 500;
   font-size: 1em;
-  letter-spacing: 0.1em;
-  color: var(--amber);
-  text-shadow: 0 0 5px rgba(255, 176, 0, 0.5);
+  letter-spacing: 0.15em;
+  color: var(--ink-soft);
+  text-shadow: 0 0 4px rgba(51, 255, 0, 0.35);
   font-style: normal;
   text-transform: none;
 }
 
-/* 标题前缀 · > */
+/* 标题前缀 · $ */
 body[data-theme="terminal"] .title::before {
-  content: "$ ";
+  content: "$ whoami ";
   color: var(--amber);
-  margin-right: 0.1em;
+  margin-right: 0.4em;
+  font-weight: 700;
+  text-shadow: 0 0 4px rgba(255, 176, 0, 0.4);
+}
+
+/* 输出 · > */
+body[data-theme="terminal"] .title::after {
+  content: "";
 }
 
 /* 光标 · 闪烁 */
@@ -431,8 +448,8 @@ body[data-theme="terminal"] .title .alias::after {
 /* 副标题 · 提示符 + 命令回显 */
 body[data-theme="terminal"] .subtitle {
   font-family: var(--font-ui);
-  font-size: clamp(12px, 1.2vw, 14px);
-  color: var(--ink-soft);
+  font-size: clamp(16px, 1.8vw, 22px);
+  color: var(--ink);
   letter-spacing: 0.05em;
   margin: 0;
   text-transform: none;
@@ -442,6 +459,7 @@ body[data-theme="terminal"] .subtitle {
 body[data-theme="terminal"] .subtitle::before {
   content: "> ";
   color: var(--amber);
+  font-weight: 700;
 }
 
 /* 链接 · shell 命令风格 */
@@ -667,59 +685,64 @@ body[data-theme="handdrawn"] .content-head {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.5rem;
+  gap: 1.4rem;
 }
 
 body[data-theme="handdrawn"] .title {
   font-family: var(--font-zh);
   font-weight: 700;
-  font-size: clamp(34px, 4.4vw, 52px);
-  letter-spacing: 0.05em;
+  font-size: clamp(14px, 1.4vw, 18px);
+  letter-spacing: 0.18em;
   display: inline-flex;
-  align-items: baseline;
-  gap: 0.4em;
+  align-items: center;
+  gap: 0.8em;
   margin: 0;
   color: var(--ink);
   flex-wrap: wrap;
   justify-content: center;
-  line-height: 1.1;
+  line-height: 1.2;
+}
+
+body[data-theme="handdrawn"] .title::before,
+body[data-theme="handdrawn"] .title::after {
+  content: "";
+  width: clamp(20px, 2.5vw, 32px);
+  height: 2px;
+  background: var(--ink);
+  flex-shrink: 0;
 }
 
 body[data-theme="handdrawn"] .title .name {
   font-family: var(--font-zh);
   font-weight: 700;
   font-size: 1em;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.1em;
   color: var(--ink);
   font-style: normal;
   text-transform: none;
-  display: inline-block;
-  transform: rotate(-1.5deg);
 }
 
 body[data-theme="handdrawn"] .title .bar {
   color: var(--accent);
   font-weight: 700;
-  font-size: 0.75em;
+  font-size: 0.85em;
 }
 
 body[data-theme="handdrawn"] .title .alias {
   font-family: var(--font-zh);
   font-weight: 700;
-  font-size: 0.82em;
-  letter-spacing: 0.1em;
+  font-size: 1em;
+  letter-spacing: 0.14em;
   color: var(--ink);
   font-style: normal;
   text-transform: none;
-  display: inline-block;
-  transform: rotate(1deg);
 }
 
 body[data-theme="handdrawn"] .subtitle {
   font-family: var(--font-zh);
-  font-size: clamp(13px, 1.3vw, 15px);
-  color: var(--ink-soft);
-  letter-spacing: 0.05em;
+  font-size: clamp(18px, 2vw, 24px);
+  color: var(--ink);
+  letter-spacing: 0.08em;
   margin: 0;
   font-style: italic;
   display: inline-block;
