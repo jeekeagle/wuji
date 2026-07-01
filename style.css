@@ -70,7 +70,8 @@ body[data-theme="washi"] .drift {
   display: block;
 }
 
-body[data-theme="washi"] .dot-bg {
+body[data-theme="washi"] .dot-bg,
+body[data-theme="washi"] .crt-scanlines {
   display: none;
 }
 
@@ -267,6 +268,311 @@ body[data-theme="washi"] .signature {
 }
 
 /* ============================================
+   主题 3 · 终端 (Terminal CLI) · 磷光绿
+   ============================================ */
+
+body[data-theme="terminal"] {
+  --bg: #0a0a0a;
+  --ink: #33ff00;
+  --ink-soft: rgba(51, 255, 0, 0.7);
+  --ink-faint: rgba(51, 255, 0, 0.35);
+  --line: #1f521f;
+  --line-soft: rgba(31, 82, 31, 0.4);
+  --amber: #ffb000;
+  --red: #ff3333;
+  --card-bg: rgba(10, 10, 10, 0.85);
+  --card-border: #1f521f;
+  --font-zh: "JetBrains Mono", "Fira Code", "Consolas", monospace;
+  --font-en: "JetBrains Mono", "Fira Code", "Consolas", monospace;
+  --font-ui: "JetBrains Mono", "Fira Code", "Consolas", monospace;
+  background-color: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-zh);
+}
+
+body[data-theme="terminal"] .paper-svg,
+body[data-theme="terminal"] .koushi,
+body[data-theme="terminal"] .drift,
+body[data-theme="terminal"] .dot-bg {
+  display: none;
+}
+
+body[data-theme="terminal"] .crt-scanlines {
+  display: block;
+}
+
+/* CRT 扫描线 · 极淡 */
+body[data-theme="terminal"] .crt-scanlines {
+  position: fixed;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0px,
+    transparent 2px,
+    rgba(0, 0, 0, 0.18) 3px,
+    transparent 4px
+  );
+  mix-blend-mode: multiply;
+  opacity: 0.55;
+}
+
+/* 卡片 · 终端窗口风格 */
+body[data-theme="terminal"] .card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 0;
+  box-shadow: none;
+  font-family: var(--font-zh);
+}
+
+/* 标题栏 · +--- system status ---+ */
+body[data-theme="terminal"] .card::before {
+  content: "+--- WUJI.SYS v0.1 -------------------+";
+  display: block;
+  padding: 0.5rem 1rem;
+  background: var(--ink);
+  color: var(--bg);
+  font-family: var(--font-ui);
+  font-size: clamp(11px, 1.1vw, 13px);
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+body[data-theme="terminal"] .content {
+  padding: clamp(1.5rem, 3vw, 2.5rem) clamp(1.5rem, 3vw, 2.5rem);
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: center;
+  gap: clamp(1rem, 2vw, 1.6rem);
+  height: 100%;
+  font-family: var(--font-ui);
+}
+
+body[data-theme="terminal"] .content-head {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+/* 标题 · 提示符 + ASCII art + 大写 */
+body[data-theme="terminal"] .title {
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: clamp(20px, 2.4vw, 28px);
+  letter-spacing: 0.05em;
+  display: block;
+  margin: 0;
+  color: var(--ink);
+  text-transform: uppercase;
+  line-height: 1.4;
+  text-align: left;
+}
+
+body[data-theme="terminal"] .title .en {
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 1em;
+  letter-spacing: 0.05em;
+  color: var(--ink);
+  text-shadow: 0 0 5px rgba(51, 255, 0, 0.5);
+}
+
+body[data-theme="terminal"] .title .bar {
+  color: var(--ink-faint);
+  font-weight: 400;
+  font-size: 1em;
+  margin: 0 0.4em;
+}
+
+body[data-theme="terminal"] .title .zh {
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 1em;
+  letter-spacing: 0.1em;
+  color: var(--amber);
+  text-shadow: 0 0 5px rgba(255, 176, 0, 0.5);
+}
+
+/* 标题前缀 · > */
+body[data-theme="terminal"] .title::before {
+  content: "$ ";
+  color: var(--amber);
+  margin-right: 0.1em;
+}
+
+/* 光标 · 闪烁 */
+body[data-theme="terminal"] .title .zh::after {
+  content: "█";
+  display: inline-block;
+  margin-left: 0.2em;
+  color: var(--ink);
+  animation: blink 1s steps(1) infinite;
+  font-weight: 400;
+}
+
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  50.01%, 100% { opacity: 0; }
+}
+
+/* 副标题 · 提示符 + 命令回显 */
+body[data-theme="terminal"] .subtitle {
+  font-family: var(--font-ui);
+  font-size: clamp(12px, 1.2vw, 14px);
+  color: var(--ink-soft);
+  letter-spacing: 0.05em;
+  margin: 0;
+  text-transform: none;
+  text-align: left;
+}
+
+body[data-theme="terminal"] .subtitle::before {
+  content: "> ";
+  color: var(--amber);
+}
+
+/* 链接 · shell 命令风格 */
+body[data-theme="terminal"] .links {
+  width: 100%;
+  max-width: none;
+}
+
+body[data-theme="terminal"] .links a {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: baseline;
+  column-gap: 0.6em;
+  padding: 0.7em 0;
+  border-top: 1px dashed var(--line-soft);
+  font-family: var(--font-ui);
+  font-size: clamp(13px, 1.4vw, 15px);
+  letter-spacing: 0.03em;
+  color: var(--ink);
+  transition: background 0.15s ease, color 0.15s ease;
+  text-transform: none;
+  border-radius: 0;
+}
+
+body[data-theme="terminal"] .links a:hover {
+  background: var(--ink);
+  color: var(--bg);
+  text-shadow: none;
+  padding-left: 0.4em;
+}
+
+body[data-theme="terminal"] .links .leader {
+  width: auto;
+  height: auto;
+  background: none;
+  color: var(--amber);
+  font-weight: 700;
+  position: relative;
+  transform: none;
+}
+
+body[data-theme="terminal"] .links .leader::before {
+  content: "→ ";
+  color: var(--amber);
+}
+
+body[data-theme="terminal"] .links .leader::after {
+  content: "";
+  display: none;
+}
+
+body[data-theme="terminal"] .links .label {
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 1em;
+  letter-spacing: 0.02em;
+  color: var(--ink);
+}
+
+body[data-theme="terminal"] .links a:hover .label {
+  color: var(--bg);
+}
+
+body[data-theme="terminal"] .links .desc {
+  font-family: var(--font-ui);
+  font-size: 0.85em;
+  color: var(--ink-faint);
+  letter-spacing: 0.02em;
+  text-align: right;
+}
+
+body[data-theme="terminal"] .links a:hover .desc {
+  color: rgba(10, 10, 10, 0.65);
+}
+
+body[data-theme="terminal"] .links .arrow {
+  display: none;
+}
+
+/* 签名 · 系统状态行 */
+body[data-theme="terminal"] .signature {
+  font-family: var(--font-ui);
+  font-size: clamp(11px, 1.1vw, 13px);
+  color: var(--ink-faint);
+  letter-spacing: 0.1em;
+  text-align: left;
+  margin-top: 0;
+  padding-top: 0.6rem;
+  border-top: 1px dashed var(--line-soft);
+}
+
+body[data-theme="terminal"] .signature::before {
+  content: "[OK] ";
+  color: var(--ink);
+  font-weight: 700;
+}
+
+/* 终端主题下的切换器 */
+body[data-theme="terminal"] .theme-switcher {
+  color: var(--ink);
+  font-family: var(--font-ui);
+  letter-spacing: 0.2em;
+}
+
+body[data-theme="terminal"] .theme-switcher button {
+  font-family: var(--font-ui);
+  color: var(--ink-faint);
+  border: 1px solid var(--line);
+  background: transparent;
+  border-radius: 0;
+  opacity: 1;
+  font-weight: 400;
+  text-transform: uppercase;
+}
+
+body[data-theme="terminal"] .theme-switcher button:hover {
+  color: var(--bg);
+  background: var(--ink);
+  border-color: var(--ink);
+  opacity: 1;
+}
+
+body[data-theme="terminal"] .theme-switcher button[aria-pressed="true"] {
+  color: var(--bg);
+  background: var(--ink);
+  border-color: var(--ink);
+  font-weight: 700;
+  text-shadow: none;
+  opacity: 1;
+  box-shadow: 0 0 8px rgba(51, 255, 0, 0.5);
+}
+
+body[data-theme="terminal"] .theme-switcher .sep {
+  color: var(--ink-faint);
+}
+
+/* ============================================
    主题 2 · 手绘 (Hand-Drawn) · 速写本
    ============================================ */
 
@@ -291,7 +597,8 @@ body[data-theme="handdrawn"] {
 
 body[data-theme="handdrawn"] .paper-svg,
 body[data-theme="handdrawn"] .koushi,
-body[data-theme="handdrawn"] .drift {
+body[data-theme="handdrawn"] .drift,
+body[data-theme="handdrawn"] .crt-scanlines {
   display: none;
 }
 
