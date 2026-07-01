@@ -1,2 +1,5 @@
 # 本地临时文件，不入版本库
 .codepilot-uploads/
+
+# 嵌入的本地仓库（不要作为 submodule）
+NextBlog/
