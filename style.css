@@ -1,11 +1,16 @@
-/* 无记 · Sugimoto-style · 纸(默认) / 夜 */
+/* 无记 · 顶 hero · 不滚动 · 纸/夜 */
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
-html { height: 100%; }
+html, body {
+    height: 100%;
+    overflow: hidden;
+}
 
 body {
-    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 32px 40px;
     background: var(--bg);
     color: var(--ink);
     font-family: var(--serif);
@@ -18,116 +23,155 @@ body {
 a { color: inherit; text-decoration: none; }
 button { font: inherit; color: inherit; background: none; border: none; cursor: pointer; }
 
-/* 四角 */
-.corner {
+/* 顶部 hero：无记 */
+.masthead {
+    flex: 0 0 auto;
+    display: flex;
+    justify-content: center;
+    padding-top: 12px;
+}
+
+.title {
+    font-family: var(--cn);
+    font-weight: 300;
+    font-size: clamp(48px, 5.2vw, 76px);
+    line-height: 1;
+    letter-spacing: 0.22em;
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.05em;
+    margin-right: -0.22em;
+}
+.title .accent { color: var(--accent); font-weight: 400; }
+
+/* 右上 nav：突出 */
+.nav-tr {
     position: fixed;
+    top: 38px;
+    right: 40px;
     z-index: 10;
-    font-size: 11px;
+    display: flex;
+    gap: 26px;
+    align-items: center;
+}
+.nav-tr a {
+    font-size: 13px;
+    font-weight: 500;
     letter-spacing: 0.22em;
     text-transform: uppercase;
-    font-weight: 400;
+    opacity: 0.85;
+    position: relative;
+    padding-bottom: 5px;
+    transition: opacity 0.2s ease;
 }
-.corner-tl { top: 36px; left: 40px; font-family: var(--serif); letter-spacing: 0.4em; font-weight: 500; }
-.corner-tr { top: 36px; right: 40px; display: flex; gap: 14px; align-items: center; }
-.corner-bl { bottom: 36px; left: 40px; opacity: 0.55; font-style: italic; letter-spacing: 0.08em; text-transform: none; font-size: 12px; font-family: var(--serif); }
-.corner-br { bottom: 36px; right: 40px; display: flex; gap: 12px; align-items: center; }
-
-.corner-tr a, .corner-br button {
-    opacity: 0.5;
-    transition: opacity 0.25s ease;
+.nav-tr a::after {
+    content: '';
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    height: 1px;
+    background: currentColor;
+    opacity: 0;
+    transform: scaleX(0.5);
+    transform-origin: center;
+    transition: opacity 0.25s ease, transform 0.25s ease;
 }
-.corner-tr a:hover, .corner-br button:hover { opacity: 1; }
-.corner-br button[aria-pressed="true"] { opacity: 1; font-weight: 500; }
+.nav-tr a:hover { opacity: 1; }
+.nav-tr a:hover::after { opacity: 0.7; transform: scaleX(1); }
 
-.sep { opacity: 0.3; user-select: none; font-weight: 300; }
-
-/* 中央画框 */
+/* 中部：画框 */
 .stage {
-    min-height: 100vh;
+    flex: 1 1 auto;
+    min-height: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 110px 24px 96px;
-    gap: 56px;
+    gap: 36px;
     animation: rise 1.2s ease-out both;
 }
 @keyframes rise {
-    from { opacity: 0; transform: translateY(10px); }
+    from { opacity: 0; transform: translateY(8px); }
     to   { opacity: 1; transform: translateY(0); }
 }
 
 .frame {
-    width: min(72vw, 880px);
+    flex: 0 0 auto;
+    width: min(56vw, 720px);
+    max-height: 56vh;
     background: var(--paper);
-    padding: 14px 14px 0;
+    padding: 12px 12px 0;
     box-shadow: var(--shadow);
     border: 1px solid var(--paper-edge);
 }
-
 .frame img {
     display: block;
     width: 100%;
-    aspect-ratio: 4 / 3;
+    aspect-ratio: 16 / 10;
     object-fit: cover;
 }
-
-.frame figcaption {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 14px;
-    padding: 18px 8px 16px;
-    font-size: 12px;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--ink-soft);
-}
-.frame figcaption em { font-style: italic; letter-spacing: 0.08em; text-transform: none; }
-.frame figcaption strong { color: var(--ink); font-weight: 500; }
-.frame figcaption .dot { opacity: 0.35; font-weight: 300; }
-
-/* 标题 */
-.title {
-    font-family: var(--cn);
-    font-weight: 300;
-    font-size: clamp(56px, 7.5vw, 112px);
-    line-height: 1;
-    letter-spacing: 0.18em;
-    display: inline-flex;
-    align-items: baseline;
-    gap: 0.05em;
-    margin-right: -0.18em;
-}
-.title .accent { color: var(--accent); }
 
 .subtitle {
     font-family: var(--serif);
     font-style: italic;
     font-weight: 300;
-    font-size: 13px;
-    letter-spacing: 0.5em;
+    font-size: 12px;
+    letter-spacing: 0.55em;
     color: var(--ink-faint);
     text-transform: uppercase;
-    padding-left: 0.5em;
+    padding-left: 0.55em;
 }
+
+/* 底部 */
+.footer-bl {
+    position: fixed;
+    bottom: 38px;
+    left: 40px;
+    z-index: 10;
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    opacity: 0.55;
+}
+
+.theme-br {
+    position: fixed;
+    bottom: 38px;
+    right: 40px;
+    z-index: 10;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+}
+.theme-br button { opacity: 0.5; transition: opacity 0.2s ease; padding: 2px 0; }
+.theme-br button:hover { opacity: 1; }
+.theme-br button[aria-pressed="true"] { opacity: 1; font-weight: 500; }
+.theme-br .sep { opacity: 0.3; user-select: none; font-weight: 300; }
 
 /* 响应式 */
 @media (max-width: 900px) {
-    .corner { font-size: 10px; }
-    .corner-tl { top: 24px; left: 24px; }
-    .corner-tr { top: 24px; right: 24px; gap: 10px; }
-    .corner-bl { bottom: 24px; left: 24px; }
-    .corner-br { bottom: 24px; right: 24px; }
-    .stage { padding: 90px 20px 80px; gap: 40px; }
-    .frame { width: min(86vw, 720px); }
+    body { padding: 24px 24px 26px; }
+    .nav-tr { top: 26px; right: 24px; gap: 16px; }
+    .nav-tr a { font-size: 11px; letter-spacing: 0.18em; }
+    .footer-bl { bottom: 26px; left: 24px; font-size: 11px; }
+    .theme-br { bottom: 26px; right: 24px; font-size: 10px; }
+    .frame { width: min(82vw, 640px); }
+    .stage { gap: 28px; }
 }
 @media (max-width: 600px) {
-    .frame { width: 92vw; padding: 10px 10px 0; }
-    .frame figcaption { flex-wrap: wrap; gap: 8px; padding: 14px 4px 12px; font-size: 10px; letter-spacing: 0.14em; }
-    .stage { gap: 32px; padding: 80px 16px 70px; }
-    .title { letter-spacing: 0.14em; }
+    body { padding: 20px 16px 22px; }
+    .nav-tr { gap: 12px; }
+    .nav-tr a { font-size: 10px; letter-spacing: 0.14em; padding-bottom: 3px; }
+    .frame { width: 100%; padding: 8px 8px 0; }
+    .frame img { aspect-ratio: 3 / 2; }
+    .stage { gap: 20px; }
+    .title { letter-spacing: 0.16em; }
+    .masthead { padding-top: 6px; }
 }
+
 @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after {
         animation-duration: 0.01ms !important;
@@ -135,28 +179,28 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
     }
 }
 
-/* 主题：纸（默认 · 米白） */
+/* 主题：纸（默认） */
 body[data-theme="paper"] {
-    --bg:        #f4f1ea;
-    --paper:     #ffffff;
+    --bg: #f4f1ea;
+    --paper: #ffffff;
     --paper-edge: transparent;
-    --ink:       #1a1a1a;
-    --ink-soft:  #6a6a6a;
+    --ink: #1a1a1a;
+    --ink-soft: #6a6a6a;
     --ink-faint: #9a9a96;
-    --accent:    #8b1a1a;
-    --shadow:    0 1px 0 rgba(0,0,0,0.04), 0 30px 60px -20px rgba(0,0,0,0.08);
-    --serif:     "Cormorant Garamond", "Noto Serif SC", "Songti SC", Georgia, serif;
-    --cn:        "Noto Serif SC", "Songti SC", "STSong", serif;
+    --accent: #8b1a1a;
+    --shadow: 0 1px 0 rgba(0,0,0,0.04), 0 30px 60px -20px rgba(0,0,0,0.08);
+    --serif: "Cormorant Garamond", "Noto Serif SC", "Songti SC", Georgia, serif;
+    --cn: "Noto Serif SC", "Songti SC", "STSong", serif;
 }
 
-/* 主题：夜（深墨） */
+/* 主题：夜 */
 body[data-theme="dark"] {
-    --bg:        #111110;
-    --paper:     #1a1a19;
-    --paper-edge: rgba(255,255,255,0.04);
-    --ink:       #e8e4dc;
-    --ink-soft:  #8a8780;
+    --bg: #111110;
+    --paper: #1a1a19;
+    --paper-edge: rgba(255,255,255,0.05);
+    --ink: #e8e4dc;
+    --ink-soft: #8a8780;
     --ink-faint: #5a5852;
-    --accent:    #c24949;
-    --shadow:    0 1px 0 rgba(255,255,255,0.03), 0 30px 60px -20px rgba(0,0,0,0.6);
+    --accent: #c24949;
+    --shadow: 0 1px 0 rgba(255,255,255,0.03), 0 30px 60px -20px rgba(0,0,0,0.6);
 }
