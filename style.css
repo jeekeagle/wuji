@@ -1,192 +1,427 @@
-/* ========================================
-   无记 · wuji
-   ======================================== */
+/* ============================================
+   无记 · AVYAKATA
+   五主题:墨(ink · 默认) · 禅(washi) · 手绘(handdrawn) · 终端(terminal) · 报(newsprint)
+   共用外壳:冷蓝白 · 45vw 焦点 · 四角定位 · 静态画框 · 极浅阴影
+   ============================================ */
 
 :root {
-  --bg: #f7f5f0;
-  --ink: #1a1a1a;
-  --ink-soft: #888;
-  --ink-faint: #c0bab0;
-  --accent: #8b1a1a;
+    /* 默认 ink 主题的色板 —— 其他主题覆盖 */
+    --bg-color: #F4F8FB;
+    --text-color: #1D1D1F;
+    --text-soft: #6E6E73;
+    --text-faint: #86868B;
+    --accent: #8b1a1a;
+    --accent-soft: rgba(139, 26, 26, 0.08);
+    --rule-color: rgba(29, 29, 31, 0.10);
+    --anchor-bg: #FFFFFF;
+    --anchor-shadow: 0 4px 24px rgba(0, 0, 0, 0.03);
+    --nav-opacity: 0.5;
+    --nav-opacity-hover: 1;
+    --footer-opacity: 0.3;
 
-  --serif-cn: "Noto Serif SC", "Songti SC", "STSong", "SimSun", serif;
-  --serif-en: "Cormorant Garamond", "EB Garamond", Georgia, serif;
-
-  --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+    --font-stack: -apple-system, BlinkMacSystemFont, "SF Pro Display",
+                  "Helvetica Neue", "Inter", "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
+    --font-serif: "Cormorant Garamond", "Songti SC", "STSong", Georgia, serif;
+    --font-mono: "JetBrains Mono", "SF Mono", "Fira Code", "Consolas", monospace;
 }
 
 * {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
-html,
-body {
-  background: var(--bg);
-  color: var(--ink);
-  font-family: var(--serif-cn);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-rendering: optimizeLegibility;
+body, html {
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: var(--font-stack);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.6s ease, color 0.6s ease;
 }
 
-body {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
+a {
+    color: inherit;
+    text-decoration: none;
 }
 
-/* ───── stage ───── */
-
-.stage {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 4rem 1.5rem;
-  gap: 2.5rem;
-  animation: rise 1.4s var(--ease) both;
+button {
+    font: inherit;
+    color: inherit;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
 }
 
-@keyframes rise {
-  from {
-    opacity: 0;
-    transform: translateY(12px);
-  }
-  to {
+/* ─── 四角定位 ─── */
+.corner-tl,
+.corner-tr,
+.corner-bl,
+.corner-br {
+    position: fixed;
+    font-size: 12px;
+    letter-spacing: 0.05em;
+    z-index: 10;
+}
+
+.corner-tl {
+    top: 40px;
+    left: 40px;
+    font-weight: 500;
+}
+
+.corner-tr {
+    top: 40px;
+    right: 40px;
+    display: flex;
+    gap: 14px;
+    align-items: center;
+}
+
+.corner-bl {
+    bottom: 40px;
+    left: 40px;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    opacity: var(--footer-opacity);
+}
+
+.corner-br {
+    bottom: 40px;
+    right: 40px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.nav-sep {
+    opacity: 0.25;
+    user-select: none;
+}
+
+/* ─── 顶部 nav 链接 ─── */
+.corner-tr a {
+    color: var(--text-color);
+    font-size: 12px;
+    letter-spacing: 0.05em;
+    opacity: var(--nav-opacity);
+    transition: opacity 0.2s ease;
+}
+
+.corner-tr a:hover {
+    opacity: var(--nav-opacity-hover);
+}
+
+/* ─── 右下主题切换按钮 ─── */
+.corner-br button {
+    color: var(--text-color);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    opacity: var(--nav-opacity);
+    transition: opacity 0.2s ease;
+    padding: 2px 0;
+}
+
+.corner-br button:hover {
+    opacity: var(--nav-opacity-hover);
+}
+
+.corner-br button[aria-pressed="true"] {
     opacity: 1;
-    transform: translateY(0);
-  }
+    font-weight: 600;
 }
 
-/* ───── brand ───── */
-
-.brand {
-  font-family: var(--serif-cn);
-  font-size: clamp(72px, 14vw, 144px);
-  font-weight: 400;
-  letter-spacing: 0.08em;
-  line-height: 1;
-  display: flex;
-  gap: 0.15em;
+/* ─── 焦点区 · 45vw 强制 55% 负空间 ─── */
+.focal-point {
+    width: 45vw;
+    max-width: 800px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
 }
 
-.ink-accent {
-  color: var(--accent);
+/* ─── Focal Anchor · 16:9 白底 · 极浅阴影 ─── */
+.focal-anchor {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background-color: var(--anchor-bg);
+    box-shadow: var(--anchor-shadow);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(1rem, 2vw, 1.6rem);
+    padding: clamp(1.5rem, 3vw, 2.5rem);
+    animation: fadeIn 1s ease-out both;
 }
 
-/* ───── subtitle ───── */
-
-.subtitle {
-  font-family: var(--serif-en);
-  font-size: clamp(14px, 1.4vw, 18px);
-  color: var(--ink-soft);
-  letter-spacing: 0.4em;
-  text-indent: 0.4em;
-  font-weight: 400;
-  font-style: italic;
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
 }
 
-/* ───── divider ───── */
-
-.divider {
-  display: block;
-  width: 60px;
-  height: 1px;
-  background: var(--ink-faint);
-  margin: 0.5rem 0;
+.anchor-mark {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.1em;
+    font-family: var(--font-serif);
+    font-weight: 500;
+    font-size: clamp(48px, 6.5vw, 96px);
+    line-height: 1;
+    letter-spacing: 0.08em;
+    color: var(--text-color);
 }
 
-/* ───── links ───── */
-
-.links {
-  display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
+.anchor-char-accent {
+    color: var(--accent);
 }
 
-.links a {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.8rem;
-  font-family: var(--serif-cn);
-  font-size: 18px;
-  color: var(--ink);
-  text-decoration: none;
-  padding: 0.5rem 0.4rem 0.5rem 0;
-  transition: transform 0.5s var(--ease);
+.anchor-rule {
+    width: 24px;
+    height: 1px;
+    background-color: var(--rule-color);
 }
 
-.links a::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  height: 1px;
-  width: 0;
-  background: var(--ink);
-  transition: width 0.5s var(--ease);
+.anchor-meta {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 1em;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    color: var(--text-soft);
 }
 
-.links a:hover {
-  transform: translateX(6px);
+.anchor-year {
+    color: var(--text-faint);
+    font-feature-settings: "tnum" 1;
 }
 
-.links a:hover::after {
-  width: calc(100% - 1.6rem);
+/* ─── Caption · 不对称右对齐 ─── */
+.focal-caption {
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    opacity: 0.7;
+    text-align: right;
+    color: var(--text-soft);
 }
 
-.arrow {
-  color: var(--ink-soft);
-  font-size: 14px;
-  transition: transform 0.5s var(--ease), color 0.5s ease;
+/* ─── 响应式 ─── */
+@media (max-width: 900px) {
+    .focal-point { width: 80vw; }
+    .corner-tl { top: 24px; left: 24px; }
+    .corner-tr { top: 24px; right: 24px; gap: 10px; }
+    .corner-bl { bottom: 24px; left: 24px; }
+    .corner-br { bottom: 24px; right: 24px; gap: 8px; }
 }
-
-.links a:hover .arrow {
-  transform: translateX(4px);
-  color: var(--ink);
-}
-
-/* ───── footer ───── */
-
-.foot {
-  padding: 2rem 1.5rem;
-  text-align: center;
-  font-family: var(--serif-en);
-  font-size: 12px;
-  color: var(--ink-soft);
-  letter-spacing: 0.3em;
-  text-indent: 0.3em;
-}
-
-/* ───── responsive ───── */
 
 @media (max-width: 600px) {
-  .stage {
-    padding: 3rem 1.5rem;
-    gap: 2rem;
-  }
-  .brand {
-    letter-spacing: 0.05em;
-    gap: 0.08em;
-  }
-  .links a {
-    font-size: 16px;
-  }
+    .focal-point { width: 88vw; }
+    .focal-anchor { aspect-ratio: 4 / 5; }
+    .corner-tl, .corner-tr, .corner-bl, .corner-br {
+        font-size: 10px;
+        letter-spacing: 0.04em;
+    }
+    .corner-tr a { font-size: 10px; }
+    .corner-br button { font-size: 9px; }
 }
 
-/* ───── reduced motion ───── */
-
 @media (prefers-reduced-motion: reduce) {
-  .stage {
-    animation: none;
-  }
-  .links a,
-  .arrow,
-  .links a::after {
-    transition: none;
-  }
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* ============================================
+   主题 0 · 墨 (Ink) · 默认 · 冷蓝白
+   ============================================ */
+
+body[data-theme="ink"] {
+    --bg-color: #F4F8FB;
+    --text-color: #1D1D1F;
+    --text-soft: #6E6E73;
+    --text-faint: #86868B;
+    --accent: #8b1a1a;
+    --rule-color: rgba(29, 29, 31, 0.10);
+    --anchor-bg: #FFFFFF;
+    --anchor-shadow: 0 4px 24px rgba(0, 0, 0, 0.03);
+}
+
+/* ============================================
+   主题 1 · 禅 (Washi) · 米色 + 朱砂 + 衬线
+   ============================================ */
+
+body[data-theme="washi"] {
+    --bg-color: #f3ede0;
+    --text-color: #1c1a17;
+    --text-soft: rgba(28, 26, 23, 0.62);
+    --text-faint: rgba(28, 26, 23, 0.40);
+    --accent: #8b1a1a;
+    --rule-color: rgba(28, 26, 23, 0.12);
+    --anchor-bg: #fbf8f0;
+    --anchor-shadow: 0 4px 24px rgba(60, 50, 30, 0.05);
+    --font-stack: "Noto Serif SC", "Songti SC", "STSong",
+                  -apple-system, BlinkMacSystemFont, serif;
+}
+
+body[data-theme="washi"] .anchor-mark {
+    font-family: var(--font-serif);
+    font-weight: 400;
+}
+
+body[data-theme="washi"] .corner-tr a,
+body[data-theme="washi"] .corner-br button,
+body[data-theme="washi"] .corner-bl {
+    font-family: "Noto Serif SC", serif;
+    letter-spacing: 0.1em;
+}
+
+/* ============================================
+   主题 4 · 报 (Newsprint) · 报刊风
+   ============================================ */
+
+body[data-theme="newsprint"] {
+    --bg-color: #f9f9f7;
+    --text-color: #111111;
+    --text-soft: #525252;
+    --text-faint: #a3a3a3;
+    --accent: #cc0000;
+    --rule-color: rgba(17, 17, 17, 0.20);
+    --anchor-bg: #ffffff;
+    --anchor-shadow: 6px 6px 0px rgba(17, 17, 17, 1);
+    --font-stack: "Playfair Display", "Times New Roman",
+                  -apple-system, Georgia, serif;
+}
+
+body[data-theme="newsprint"] .anchor-mark {
+    font-family: var(--font-stack);
+    font-style: italic;
+    font-weight: 900;
+    letter-spacing: -0.02em;
+}
+
+body[data-theme="newsprint"] .anchor-char-accent {
+    color: var(--accent);
+}
+
+body[data-theme="newsprint"] .focal-caption {
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    font-size: 10px;
+}
+
+body[data-theme="newsprint"] .corner-tr a,
+body[data-theme="newsprint"] .corner-br button {
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+}
+
+/* ============================================
+   主题 3 · 终端 (Terminal) · 黑底 + 磷光绿
+   ============================================ */
+
+body[data-theme="terminal"] {
+    --bg-color: #0a0a0a;
+    --text-color: #33ff00;
+    --text-soft: rgba(51, 255, 0, 0.7);
+    --text-faint: rgba(51, 255, 0, 0.4);
+    --accent: #ffb000;
+    --rule-color: rgba(51, 255, 0, 0.20);
+    --anchor-bg: #0d0d0d;
+    --anchor-shadow: 0 0 0 1px rgba(51, 255, 0, 0.15),
+                     0 0 24px rgba(51, 255, 0, 0.08);
+    --font-stack: "JetBrains Mono", "SF Mono", "Fira Code",
+                  "Consolas", monospace;
+}
+
+body[data-theme="terminal"] .anchor-mark {
+    font-family: var(--font-stack);
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-shadow: 0 0 12px rgba(51, 255, 0, 0.4);
+}
+
+body[data-theme="terminal"] .anchor-char-accent {
+    color: var(--accent);
+    text-shadow: 0 0 12px rgba(255, 176, 0, 0.5);
+}
+
+body[data-theme="terminal"] .anchor-meta {
+    text-shadow: 0 0 6px rgba(51, 255, 0, 0.3);
+}
+
+body[data-theme="terminal"] .anchor-meta::before {
+    content: "$ ";
+    color: var(--accent);
+    font-weight: 700;
+}
+
+body[data-theme="terminal"] .anchor-meta::after {
+    content: "█";
+    margin-left: 0.3em;
+    color: var(--accent);
+    animation: blink 1s steps(1) infinite;
+}
+
+body[data-theme="terminal"] .focal-caption::before {
+    content: "[OK] ";
+    color: var(--accent);
+    font-weight: 700;
+    margin-right: 0.4em;
+}
+
+@keyframes blink {
+    0%, 50% { opacity: 1; }
+    50.01%, 100% { opacity: 0; }
+}
+
+body[data-theme="terminal"] .corner-tr a,
+body[data-theme="terminal"] .corner-br button {
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+}
+
+/* ============================================
+   主题 2 · 手绘 (Hand-Drawn) · 速写本
+   ============================================ */
+
+body[data-theme="handdrawn"] {
+    --bg-color: #fdf6e3;
+    --text-color: #2d2823;
+    --text-soft: rgba(45, 40, 35, 0.65);
+    --text-faint: rgba(45, 40, 35, 0.45);
+    --accent: #d2691e;
+    --rule-color: rgba(45, 40, 35, 0.25);
+    --anchor-bg: #fff8e7;
+    --anchor-shadow: 5px 5px 0px rgba(45, 40, 35, 0.85);
+    --font-stack: "Kalam", "Patrick Hand", "Comic Sans MS", cursive;
+}
+
+body[data-theme="handdrawn"] .anchor-mark {
+    font-family: "Ma Shan Zheng", "Noto Serif SC", cursive;
+    font-weight: 700;
+}
+
+body[data-theme="handdrawn"] .anchor-rule {
+    height: 2px;
+    background-color: var(--text-color);
+    width: 28px;
+}
+
+body[data-theme="handdrawn"] .focal-anchor {
+    border: 2.5px solid var(--text-color);
+    border-radius: 22px 26px 20px 28px / 24px 22px 28px 20px;
+}
+
+body[data-theme="handdrawn"] .focal-caption::before,
+body[data-theme="handdrawn"] .focal-caption::after {
+    content: " ✦ ";
+    color: var(--accent);
 }
