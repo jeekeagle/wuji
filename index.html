@@ -3,129 +3,34 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>无记 · 王益国的数字花园</title>
-  <meta name="description" content="记录 · 而获得自己" />
-  <meta name="theme-color" content="#f5f0e6" />
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23f5f0e6'/%3E%3Ctext x='50' y='64' text-anchor='middle' font-size='52' font-family='serif' fill='%231a1a1a'%3E无%3C/text%3E%3C/svg%3E" />
+  <title>无记</title>
+  <meta name="description" content="记录，而获得自己" />
+  <meta name="theme-color" content="#f7f5f0" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23f7f5f0'/%3E%3Ctext x='50' y='62' text-anchor='middle' font-size='56' font-family='serif' fill='%238b1a1a'%3E记%3C/text%3E%3C/svg%3E" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Noto+Serif+SC:wght@300;400;500;700;900&family=Noto+Sans+SC:wght@300;400;500;700&family=Kalam:wght@400;700&family=Patrick+Hand&family=JetBrains+Mono:wght@400;500;700&family=VT323&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Lora:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;1,400&family=Noto+Serif+SC:wght@300;400;500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="./style.css" />
 </head>
-<body data-theme="washi">
-
-  <!-- ─── Washi-only layers · 褶皱 + 罫紙 + 光斑 ─── -->
-  <svg class="paper-svg" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" aria-hidden="true">
-    <defs>
-      <filter id="paper" x="0%" y="0%" width="100%" height="100%">
-        <feTurbulence type="fractalNoise" baseFrequency="0.0035" numOctaves="2" seed="3" result="wrinkleBig"/>
-        <feTurbulence type="fractalNoise" baseFrequency="0.014" numOctaves="2" seed="7" result="wrinkleMid"/>
-        <feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="1" seed="11" result="fiber"/>
-        <feComposite in="wrinkleMid" in2="wrinkleBig" operator="arithmetic" k1="0" k2="0.4" k3="0.6" result="wrinkle"/>
-        <feDiffuseLighting in="wrinkle" lighting-color="#f5f0e6" surfaceScale="4.5" diffuseConstant="1.2" result="litWarm">
-          <feDistantLight azimuth="135" elevation="55"/>
-        </feDiffuseLighting>
-        <feDiffuseLighting in="wrinkle" lighting-color="#d8d0c0" surfaceScale="2.8" diffuseConstant="0.7" result="litCool">
-          <feDistantLight azimuth="315" elevation="32"/>
-        </feDiffuseLighting>
-        <feComposite in="litCool" in2="litWarm" operator="arithmetic" k1="0" k2="0.4" k3="0.6" k4="0" result="paper"/>
-        <feComposite in="fiber" in2="paper" operator="in" result="fiberOverlay"/>
-        <feMerge>
-          <feMergeNode in="paper"/>
-          <feMergeNode in="fiberOverlay"/>
-        </feMerge>
-      </filter>
-    </defs>
-    <rect width="100%" height="100%" filter="url(#paper)"/>
-  </svg>
-
-  <div class="koushi" aria-hidden="true"></div>
-  <div class="drift" aria-hidden="true"></div>
-
-  <!-- ─── Handdrawn-only layer · 笔记本点阵 ─── -->
-  <div class="dot-bg" aria-hidden="true"></div>
-
-  <!-- ─── Terminal-only layers · 扫描线 ─── -->
-  <div class="crt-scanlines" aria-hidden="true"></div>
-
-  <!-- ─── Newsprint-only layers · 网点底纹 ─── -->
-  <div class="newsprint-bg" aria-hidden="true"></div>
-
-  <!-- ─── 主体内容 ─── -->
+<body>
   <main class="stage">
-    <article class="card" aria-label="无记入口">
+    <h1 class="brand">
+      <span>无</span><span class="ink-accent">记</span>
+    </h1>
+    <p class="subtitle">记录 · 而获得自己</p>
 
-      <!-- Hero 大字 · 主题决定字形 -->
-      <h1 class="hero" aria-label="无记">
-        <span class="hero-char">无</span>
-        <span class="hero-char">记</span>
-      </h1>
+    <span class="divider" aria-hidden="true"></span>
 
-      <div class="content">
-
-        <header class="content-head">
-          <p class="signature-line">
-            <span class="name">王益国的数字花园</span>
-            <span class="bar" aria-hidden="true">|</span>
-            <span class="tagline">记录 · 而获得自己</span>
-          </p>
-        </header>
-
-        <nav class="links" aria-label="主导航">
-          <a href="https://jeekeagle.github.io/wuji-blog/" target="_blank" rel="noopener">
-            <span class="leader" aria-hidden="true"></span>
-            <span class="label">随笔</span>
-            <span class="desc">jeekeagle.github.io/wuji-blog</span>
-            <span class="arrow" aria-hidden="true">↗</span>
-          </a>
-          <a href="https://jeekeagle.github.io/zero-perspective-hub/" target="_blank" rel="noopener">
-            <span class="leader" aria-hidden="true"></span>
-            <span class="label">视角</span>
-            <span class="desc">jeekeagle.github.io/zero-perspective-hub</span>
-            <span class="arrow" aria-hidden="true">↗</span>
-          </a>
-          <a href="https://jeekeagle.github.io/ZeroPark/" target="_blank" rel="noopener">
-            <span class="leader" aria-hidden="true"></span>
-            <span class="label">园</span>
-            <span class="desc">jeekeagle.github.io/ZeroPark</span>
-            <span class="arrow" aria-hidden="true">↗</span>
-          </a>
-        </nav>
-
-        <p class="signature" aria-hidden="true">— 记录，而获得自己</p>
-      </div>
-    </article>
+    <nav class="links" aria-label="主导航">
+      <a href="https://openwalk.top" target="_blank" rel="noopener">
+        <span class="label">随笔</span>
+        <span class="arrow" aria-hidden="true">→</span>
+      </a>
+    </nav>
   </main>
 
-  <!-- ─── 左下角主题切换器 ─── -->
-  <nav class="theme-switcher" aria-label="主题切换">
-    <button type="button" data-set-theme="washi" aria-pressed="true">禅</button>
-    <span class="sep" aria-hidden="true">·</span>
-    <button type="button" data-set-theme="handdrawn" aria-pressed="false">绘</button>
-    <span class="sep" aria-hidden="true">·</span>
-    <button type="button" data-set-theme="terminal" aria-pressed="false">$</button>
-    <span class="sep" aria-hidden="true">·</span>
-    <button type="button" data-set-theme="newsprint" aria-pressed="false">报</button>
-  </nav>
-
-  <script>
-    (function () {
-      const body = document.body;
-      const buttons = document.querySelectorAll('[data-set-theme]');
-      buttons.forEach(function (btn) {
-        btn.addEventListener('click', function () {
-          const theme = btn.getAttribute('data-set-theme');
-          if (!theme) return;
-          body.setAttribute('data-theme', theme);
-          buttons.forEach(function (b) {
-            b.setAttribute(
-              'aria-pressed',
-              b.getAttribute('data-set-theme') === theme ? 'true' : 'false'
-            );
-          });
-        });
-      });
-    })();
-  </script>
+  <footer class="foot">
+    <span>openwalk.top</span>
+  </footer>
 </body>
 </html>
