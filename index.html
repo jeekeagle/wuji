@@ -3,16 +3,16 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>王益国的数字花园 · 无记</title>
-  <meta name="description" content="记录，而获得自己" />
+  <title>无记 · 王益国的数字花园</title>
+  <meta name="description" content="记录 · 而获得自己" />
   <meta name="theme-color" content="#f5f0e6" />
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23f5f0e6'/%3E%3Ctext x='50' y='64' text-anchor='middle' font-size='52' font-family='serif' fill='%231a1a1a'%3E无%3C/text%3E%3C/svg%3E" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Noto+Serif+SC:wght@300;400;500;700&family=Noto+Sans+SC:wght@300;400;500;700&family=Kalam:wght@400;700&family=Patrick+Hand&family=JetBrains+Mono:wght@400;500;700&family=VT323&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Lora:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Noto+Serif+SC:wght@300;400;500;700;900&family=Noto+Sans+SC:wght@300;400;500;700&family=Kalam:wght@400;700&family=Patrick+Hand&family=JetBrains+Mono:wght@400;500;700&family=VT323&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Lora:ital,wght@0,400;0,600;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="./style.css" />
 </head>
-<body data-theme="newsprint">
+<body data-theme="washi">
 
   <!-- ─── Washi-only layers · 褶皱 + 罫紙 + 光斑 ─── -->
   <svg class="paper-svg" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" aria-hidden="true">
@@ -51,16 +51,24 @@
   <!-- ─── Newsprint-only layers · 网点底纹 ─── -->
   <div class="newsprint-bg" aria-hidden="true"></div>
 
-  <!-- ─── 主体内容（Apple-style 浮动卡片） ─── -->
+  <!-- ─── 主体内容 ─── -->
   <main class="stage">
     <article class="card" aria-label="无记入口">
+
+      <!-- Hero 大字 · 主题决定字形 -->
+      <h1 class="hero" aria-label="无记">
+        <span class="hero-char">无</span>
+        <span class="hero-char">记</span>
+      </h1>
+
       <div class="content">
+
         <header class="content-head">
-          <h1 class="title">
+          <p class="signature-line">
             <span class="name">王益国的数字花园</span>
             <span class="bar" aria-hidden="true">|</span>
             <span class="tagline">记录 · 而获得自己</span>
-          </h1>
+          </p>
         </header>
 
         <nav class="links" aria-label="主导航">
@@ -68,6 +76,18 @@
             <span class="leader" aria-hidden="true"></span>
             <span class="label">随笔</span>
             <span class="desc">jeekeagle.github.io/wuji-blog</span>
+            <span class="arrow" aria-hidden="true">↗</span>
+          </a>
+          <a href="https://jeekeagle.github.io/zero-perspective-hub/" target="_blank" rel="noopener">
+            <span class="leader" aria-hidden="true"></span>
+            <span class="label">视角</span>
+            <span class="desc">jeekeagle.github.io/zero-perspective-hub</span>
+            <span class="arrow" aria-hidden="true">↗</span>
+          </a>
+          <a href="https://jeekeagle.github.io/ZeroPark/" target="_blank" rel="noopener">
+            <span class="leader" aria-hidden="true"></span>
+            <span class="label">园</span>
+            <span class="desc">jeekeagle.github.io/ZeroPark</span>
             <span class="arrow" aria-hidden="true">↗</span>
           </a>
         </nav>
@@ -79,13 +99,13 @@
 
   <!-- ─── 左下角主题切换器 ─── -->
   <nav class="theme-switcher" aria-label="主题切换">
-    <button type="button" data-set-theme="washi" aria-pressed="false">禅</button>
+    <button type="button" data-set-theme="washi" aria-pressed="true">禅</button>
     <span class="sep" aria-hidden="true">·</span>
-    <button type="button" data-set-theme="handdrawn" aria-pressed="false">手绘</button>
+    <button type="button" data-set-theme="handdrawn" aria-pressed="false">绘</button>
     <span class="sep" aria-hidden="true">·</span>
     <button type="button" data-set-theme="terminal" aria-pressed="false">$</button>
     <span class="sep" aria-hidden="true">·</span>
-    <button type="button" data-set-theme="newsprint" aria-pressed="true">报</button>
+    <button type="button" data-set-theme="newsprint" aria-pressed="false">报</button>
   </nav>
 
   <script>
