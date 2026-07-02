@@ -1,9 +1,10 @@
 /* ============================================
    无记 · AVYAKATA
-   双主题：禅 (Washi) · 手绘 (Hand-Drawn)
+   四主题:禅(washi) · 手绘(handdrawn) · 终端(terminal) · 报(newsprint)
+   共享一套 HTML,通过 [data-theme] 切换。
    ============================================ */
 
-/* ─── 重置 ─── */
+/* ─── Reset ─── */
 *,
 *::before,
 *::after {
@@ -23,7 +24,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
-  transition: background-color 0.5s ease, color 0.5s ease;
+  transition: background-color 0.6s ease, color 0.6s ease;
 }
 
 a {
@@ -39,23 +40,229 @@ button {
   cursor: pointer;
 }
 
+/* ─── 共享布局 ─── */
+.stage {
+  position: relative;
+  z-index: 10;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(4rem, 8vh, 7rem) clamp(1.5rem, 5vw, 3rem);
+  animation: fadeUp 0.9s ease-out both;
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.card {
+  width: 100%;
+  max-width: 820px;
+  min-height: 480px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(2.4rem, 4vw, 3.6rem);
+}
+
+.content {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(1.6rem, 2.6vw, 2.4rem);
+  text-align: center;
+}
+
+.content-head {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+/* 标题行 · 王益国的数字花园 | 记录 · 而获得自己 */
+.signature-line {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.7em;
+  flex-wrap: wrap;
+  justify-content: center;
+  line-height: 1.4;
+  font-size: clamp(15px, 1.5vw, 19px);
+  letter-spacing: 0.05em;
+}
+
+.signature-line .name {
+  font-weight: 500;
+}
+
+.signature-line .bar {
+  font-weight: 200;
+  font-size: 0.9em;
+}
+
+.signature-line .tagline {
+  font-weight: 300;
+  letter-spacing: 0.1em;
+}
+
+/* 子站链接 */
+.links {
+  width: 100%;
+  max-width: 460px;
+  display: flex;
+  flex-direction: column;
+}
+
+.links a {
+  display: grid;
+  grid-template-columns: auto 1fr auto auto;
+  align-items: baseline;
+  column-gap: 1.1em;
+  padding: 0.95em 0;
+  transition: color 0.3s ease, transform 0.3s ease, background 0.3s ease;
+}
+
+.links .label {
+  font-size: clamp(17px, 1.7vw, 20px);
+  font-weight: 400;
+  letter-spacing: 0.05em;
+}
+
+.links .desc {
+  font-style: italic;
+  font-size: 0.82em;
+  letter-spacing: 0.04em;
+}
+
+.links .arrow {
+  font-size: 0.95em;
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.links .leader {
+  width: 24px;
+  height: 1px;
+  background: currentColor;
+  transition: width 0.4s ease, background 0.3s ease;
+}
+
+.links a:hover .leader {
+  width: 44px;
+}
+
+.links a:hover .arrow {
+  transform: translate(2px, -2px);
+}
+
+.signature {
+  font-size: 0.85em;
+  letter-spacing: 0.08em;
+  text-align: center;
+}
+
+/* ─── 左下角主题切换器 ─── */
+.theme-switcher {
+  position: fixed;
+  left: clamp(1.2rem, 2.5vw, 2rem);
+  bottom: clamp(1.2rem, 2.5vw, 2rem);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  gap: 0.55em;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  user-select: none;
+}
+
+.theme-switcher button {
+  padding: 0.3em 0.55em;
+  font-family: inherit;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  border-radius: 2px;
+  transition: opacity 0.3s ease;
+  opacity: 0.4;
+}
+
+.theme-switcher button:hover {
+  opacity: 0.8;
+}
+
+.theme-switcher button[aria-pressed="true"] {
+  opacity: 1;
+  font-weight: 600;
+}
+
+.theme-switcher .sep {
+  opacity: 0.3;
+}
+
+/* ─── 响应式 ─── */
+@media (max-width: 720px) {
+  .card {
+    min-height: 0;
+  }
+}
+
+@media (max-width: 600px) {
+  .signature-line {
+    gap: 0.35em;
+  }
+  .links a {
+    grid-template-columns: auto 1fr auto;
+  }
+  .links .desc {
+    grid-column: 2 / 4;
+    font-size: 0.72em;
+    margin-top: 0.2em;
+    text-align: left;
+  }
+  .theme-switcher {
+    font-size: 10px;
+  }
+}
+
+/* ─── 用户偏好 · 减少动效 ─── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  body[data-theme="washi"] .drift {
+    animation: none;
+  }
+}
+
 /* ============================================
    主题 1 · 禅 (Washi) · 当代和纸
    ============================================ */
 
 body[data-theme="washi"] {
-  --bg: #f5f0e6;
-  --ink: #1a1a1a;
-  --ink-soft: rgba(26, 26, 26, 0.55);
-  --ink-faint: rgba(26, 26, 26, 0.25);
-  --line: rgba(26, 26, 26, 0.55);
-  --line-soft: rgba(26, 26, 26, 0.055);
-  --line-main: rgba(26, 26, 26, 0.10);
-  --card-bg: rgba(255, 253, 248, 0.55);
-  --card-border: rgba(26, 26, 26, 0.08);
-  --card-shadow: 0 30px 60px -20px rgba(60, 50, 30, 0.15),
-                 0 8px 24px -8px rgba(60, 50, 30, 0.10),
-                 inset 0 1px 0 rgba(255, 255, 255, 0.5);
+  --bg: #f3ede0;
+  --ink: #1c1a17;
+  --ink-soft: rgba(28, 26, 23, 0.58);
+  --ink-faint: rgba(28, 26, 23, 0.28);
+  --line: rgba(28, 26, 23, 0.55);
+  --line-soft: rgba(28, 26, 23, 0.06);
+  --line-main: rgba(28, 26, 23, 0.09);
+  --vermilion: #8b1a1a;
   --font-zh: "Noto Serif SC", "Songti SC", "STSong", serif;
   --font-en: "Cormorant Garamond", "EB Garamond", Georgia, serif;
   --font-ui: "Noto Serif SC", "Songti SC", serif;
@@ -84,7 +291,7 @@ body[data-theme="washi"] .paper-svg {
   height: 100%;
   z-index: 0;
   pointer-events: none;
-  opacity: 0.82;
+  opacity: 0.85;
 }
 
 /* 罫紙网格 · 主辅线 */
@@ -126,153 +333,315 @@ body[data-theme="washi"] .drift {
   50%      { background-position: 5% 8%, 95% 92%, 52% 48%; }
 }
 
-/* 卡片 · 禅主题 · 毛玻璃 + 微妙边框 */
-body[data-theme="washi"] .card {
-  background: var(--card-bg);
-  border: 1px solid var(--card-border);
-  border-radius: 20px;
-  backdrop-filter: blur(20px) saturate(120%);
-  -webkit-backdrop-filter: blur(20px) saturate(120%);
-  box-shadow: var(--card-shadow);
-}
-
-body[data-theme="washi"] .content {
-  padding: clamp(2rem, 4.5vw, 3.5rem) clamp(2.5rem, 5vw, 4rem);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  gap: clamp(1.4rem, 2.5vw, 2rem);
-  height: 100%;
-}
-
-body[data-theme="washi"] .content-head {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-body[data-theme="washi"] .title {
-  font-family: var(--font-zh);
-  font-weight: 400;
-  font-size: clamp(13px, 1.3vw, 17px);
-  display: inline-flex;
-  align-items: baseline;
-  gap: 0.6em;
-  margin: 0;
-  flex-wrap: wrap;
-  justify-content: center;
-  line-height: 1.3;
-  color: var(--ink);
-}
-
-body[data-theme="washi"] .title .name {
+/* Hero · 禅 · 大字 + 朱砂「记」 */
+body[data-theme="washi"] .hero {
   font-family: "Noto Serif SC", "Songti SC", "STSong", serif;
-  font-weight: 500;
-  font-size: 1em;
-  letter-spacing: 0.16em;
+  font-weight: 300;
+  font-size: clamp(140px, 22vw, 240px);
+  line-height: 0.95;
+  letter-spacing: 0.02em;
+  display: inline-flex;
+  gap: 0.05em;
   color: var(--ink);
-  font-style: normal;
-  text-transform: none;
+  user-select: none;
 }
 
-body[data-theme="washi"] .title .bar {
+body[data-theme="washi"] .hero-char:last-child {
+  color: var(--vermilion);
+  font-weight: 400;
+}
+
+body[data-theme="washi"] .card {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
+
+/* 标题行 */
+body[data-theme="washi"] .signature-line {
+  color: var(--ink);
+}
+
+body[data-theme="washi"] .signature-line .name {
+  letter-spacing: 0.18em;
+}
+
+body[data-theme="washi"] .signature-line .bar {
   color: var(--ink-faint);
-  font-weight: 200;
-  font-size: 0.9em;
-  font-family: serif;
 }
 
-body[data-theme="washi"] .title .tagline {
-  font-family: "Noto Sans SC", "Inter", "Helvetica Neue", sans-serif;
-  font-weight: 300;
-  font-size: 0.92em;
-  letter-spacing: 0.12em;
+body[data-theme="washi"] .signature-line .tagline {
   color: var(--ink-soft);
-  font-style: normal;
-  text-transform: none;
+  font-family: var(--font-en);
+  font-style: italic;
+  letter-spacing: 0.06em;
 }
 
-body[data-theme="washi"] .subtitle {
-  font-family: var(--font-zh);
-  font-size: clamp(20px, 2.2vw, 28px);
-  color: var(--ink);
-  letter-spacing: 0.35em;
-  margin: 0;
-  font-weight: 300;
-}
-
-body[data-theme="washi"] .links {
-  width: 100%;
-  max-width: 380px;
-}
-
+/* 链接 */
 body[data-theme="washi"] .links a {
-  display: grid;
-  grid-template-columns: auto 1fr auto auto;
-  align-items: baseline;
-  column-gap: 1.2em;
-  padding: 0.9em 0;
   border-top: 1px dashed var(--line-soft);
-  transition: color 0.3s ease;
 }
 
-body[data-theme="washi"] .links a:hover {
-  color: var(--ink);
-}
-
-body[data-theme="washi"] .links .leader {
-  width: 24px;
-  height: 1px;
-  background: var(--line);
-  transition: width 0.4s ease, background 0.3s ease;
-}
-
-body[data-theme="washi"] .links a:hover .leader {
-  width: 44px;
-  background: #8b1a1a;
+body[data-theme="washi"] .links a:last-child {
+  border-bottom: 1px dashed var(--line-soft);
 }
 
 body[data-theme="washi"] .links .label {
   font-family: var(--font-zh);
-  font-size: clamp(16px, 1.6vw, 19px);
-  font-weight: 400;
-  letter-spacing: 0.05em;
 }
 
 body[data-theme="washi"] .links .desc {
   font-family: var(--font-en);
-  font-style: italic;
-  font-size: 0.78em;
   color: var(--ink-soft);
-  letter-spacing: 0.05em;
 }
 
-body[data-theme="washi"] .links .arrow {
-  font-size: 0.95em;
-  color: var(--ink-soft);
-  transition: transform 0.3s ease, color 0.3s ease;
+body[data-theme="washi"] .links .leader {
+  background: var(--line);
+}
+
+body[data-theme="washi"] .links a:hover .leader {
+  background: var(--vermilion);
 }
 
 body[data-theme="washi"] .links a:hover .arrow {
-  transform: translate(2px, -2px);
-  color: #8b1a1a;
+  color: var(--vermilion);
 }
 
 body[data-theme="washi"] .signature {
-  margin-top: 0;
   font-family: var(--font-en);
   font-style: italic;
-  font-size: 0.85em;
   color: var(--ink-faint);
-  letter-spacing: 0.05em;
-  text-align: center;
+}
+
+/* 切换器 */
+body[data-theme="washi"] .theme-switcher {
+  color: var(--ink-soft);
+  font-family: var(--font-zh);
+  letter-spacing: 0.2em;
+}
+
+body[data-theme="washi"] .theme-switcher button[aria-pressed="true"] {
+  color: var(--ink);
 }
 
 /* ============================================
-   主题 3 · 终端 (Terminal CLI) · 磷光绿
+   主题 4 · 报 (Newsprint) · 报纸编辑风
+   ============================================ */
+
+body[data-theme="newsprint"] {
+  --bg: #f9f9f7;
+  --ink: #111111;
+  --ink-soft: #525252;
+  --ink-faint: #a3a3a3;
+  --line: #111111;
+  --line-soft: #e5e5e0;
+  --red: #cc0000;
+  --font-display: "Playfair Display", "Times New Roman", serif;
+  --font-body: "Lora", Georgia, serif;
+  --font-sans: "Inter", "Helvetica Neue", sans-serif;
+  --font-zh: "Noto Serif SC", "Songti SC", "STSong", serif;
+  --font-en: "Playfair Display", "Times New Roman", serif;
+  --font-ui: "Inter", "Helvetica Neue", sans-serif;
+  --font-mono: "JetBrains Mono", "Courier New", monospace;
+  background-color: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+}
+
+body[data-theme="newsprint"] .paper-svg,
+body[data-theme="newsprint"] .koushi,
+body[data-theme="newsprint"] .drift,
+body[data-theme="newsprint"] .dot-bg,
+body[data-theme="newsprint"] .crt-scanlines {
+  display: none;
+}
+
+body[data-theme="newsprint"] .newsprint-bg {
+  display: block;
+}
+
+/* 报纸网点底纹 */
+body[data-theme="newsprint"] .newsprint-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4' viewBox='0 0 4 4'%3E%3Cpath fill='%23111111' fill-opacity='0.05' d='M1 3h1v1H1V3zm2-2h1v1H3V1z'/%3E%3C/svg%3E");
+}
+
+/* 卡片 · 无边框 · 报刊版心 */
+body[data-theme="newsprint"] .card {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
+
+body[data-theme="newsprint"] .stage {
+  padding: clamp(4rem, 8vh, 6rem) clamp(2rem, 6vw, 4rem);
+}
+
+/* Hero · 报 · 通栏大字 */
+body[data-theme="newsprint"] .hero {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-style: italic;
+  font-size: clamp(160px, 26vw, 280px);
+  line-height: 0.85;
+  letter-spacing: -0.04em;
+  display: flex;
+  gap: 0.04em;
+  color: var(--ink);
+  user-select: none;
+}
+
+body[data-theme="newsprint"] .hero-char:first-child {
+  color: var(--ink);
+}
+
+body[data-theme="newsprint"] .hero-char:last-child {
+  color: var(--red);
+}
+
+/* 副标 + 顶部边线 */
+body[data-theme="newsprint"] .content-head {
+  padding-bottom: 0.8rem;
+  border-bottom: 2px solid var(--line);
+  width: 100%;
+}
+
+body[data-theme="newsprint"] .signature-line {
+  font-family: var(--font-display);
+  font-size: clamp(18px, 1.9vw, 24px);
+  letter-spacing: 0.04em;
+  width: 100%;
+  justify-content: space-between;
+}
+
+body[data-theme="newsprint"] .signature-line .name {
+  font-family: "Noto Serif SC", serif;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+}
+
+body[data-theme="newsprint"] .signature-line .bar {
+  color: var(--red);
+  font-weight: 400;
+}
+
+body[data-theme="newsprint"] .signature-line .tagline {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 400;
+  color: var(--ink);
+}
+
+/* 链接 · 报刊目录风 */
+body[data-theme="newsprint"] .links {
+  width: 100%;
+  max-width: none;
+  border-top: 1px solid var(--line);
+}
+
+body[data-theme="newsprint"] .links a {
+  display: grid;
+  grid-template-columns: auto auto 1fr auto;
+  align-items: baseline;
+  column-gap: 1.2rem;
+  padding: 1.1rem 0.2rem;
+  border-bottom: 1px solid var(--line);
+}
+
+body[data-theme="newsprint"] .links .leader {
+  width: auto;
+  height: auto;
+  background: none;
+  font-family: var(--font-mono);
+  font-size: 0.78em;
+  font-weight: 700;
+  color: var(--red);
+  letter-spacing: 0.15em;
+}
+
+body[data-theme="newsprint"] .links .leader::before {
+  content: "§";
+  margin-right: 0.4em;
+}
+
+body[data-theme="newsprint"] .links .label {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-style: italic;
+  font-size: clamp(20px, 2.1vw, 26px);
+  letter-spacing: -0.01em;
+  text-align: left;
+}
+
+body[data-theme="newsprint"] .links .desc {
+  font-family: var(--font-mono);
+  font-style: normal;
+  font-size: 0.8em;
+  color: var(--ink-soft);
+  letter-spacing: 0.02em;
+  text-align: right;
+}
+
+body[data-theme="newsprint"] .links .arrow {
+  color: var(--red);
+  font-weight: 600;
+}
+
+body[data-theme="newsprint"] .links a:hover {
+  background: var(--ink);
+  color: var(--bg);
+}
+
+body[data-theme="newsprint"] .links a:hover .desc,
+body[data-theme="newsprint"] .links a:hover .label,
+body[data-theme="newsprint"] .links a:hover .leader,
+body[data-theme="newsprint"] .links a:hover .arrow {
+  color: var(--bg);
+}
+
+body[data-theme="newsprint"] .links a:hover .leader {
+  color: var(--red);
+}
+
+/* 签名 · 报刊版权行 */
+body[data-theme="newsprint"] .signature {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--ink-soft);
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  text-align: left;
+  width: 100%;
+  padding-top: 0.6rem;
+  border-top: 1px dashed var(--line);
+}
+
+/* 切换器 */
+body[data-theme="newsprint"] .theme-switcher {
+  color: var(--ink);
+  font-family: var(--font-mono);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  font-size: 10px;
+}
+
+body[data-theme="newsprint"] .theme-switcher button {
+  border: 1px solid var(--line);
+  border-radius: 0;
+}
+
+body[data-theme="newsprint"] .theme-switcher button[aria-pressed="true"] {
+  background: var(--ink);
+  color: var(--bg);
+  border-color: var(--ink);
+}
+
+/* ============================================
+   主题 3 · 终端 (Terminal) · 磷光绿
    ============================================ */
 
 body[data-theme="terminal"] {
@@ -284,8 +653,6 @@ body[data-theme="terminal"] {
   --line-soft: rgba(31, 82, 31, 0.4);
   --amber: #ffb000;
   --red: #ff3333;
-  --card-bg: rgba(10, 10, 10, 0.85);
-  --card-border: #1f521f;
   --font-zh: "JetBrains Mono", "Fira Code", "Consolas", monospace;
   --font-en: "JetBrains Mono", "Fira Code", "Consolas", monospace;
   --font-ui: "JetBrains Mono", "Fira Code", "Consolas", monospace;
@@ -323,24 +690,24 @@ body[data-theme="terminal"] .crt-scanlines {
   opacity: 0.55;
 }
 
-/* 卡片 · 终端窗口风格 */
+/* 卡片 · 终端窗口 */
 body[data-theme="terminal"] .card {
-  background: var(--card-bg);
-  border: 1px solid var(--card-border);
+  background: rgba(10, 10, 10, 0.85);
+  border: 1px solid var(--line);
   border-radius: 0;
   box-shadow: none;
-  font-family: var(--font-zh);
 }
 
-/* 标题栏 · +--- system status ---+ */
+/* 标题栏 · ~/wuji $ */
 body[data-theme="terminal"] .card::before {
-  content: "+--- WUJI.SYS v0.1 -------------------+";
+  content: "~/wuji $ ";
   display: block;
+  width: 100%;
   padding: 0.5rem 1rem;
   background: var(--ink);
   color: var(--bg);
   font-family: var(--font-ui);
-  font-size: clamp(11px, 1.1vw, 13px);
+  font-size: clamp(12px, 1.1vw, 14px);
   font-weight: 700;
   letter-spacing: 0.05em;
   text-transform: uppercase;
@@ -349,107 +716,77 @@ body[data-theme="terminal"] .card::before {
   text-overflow: ellipsis;
 }
 
-body[data-theme="terminal"] .content {
-  padding: clamp(1.5rem, 3vw, 2.5rem) clamp(1.5rem, 3vw, 2.5rem);
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  justify-content: center;
-  gap: clamp(1rem, 2vw, 1.6rem);
-  height: 100%;
+/* Hero · 终端 · 等宽大字符 */
+body[data-theme="terminal"] .hero {
   font-family: var(--font-ui);
-}
-
-body[data-theme="terminal"] .content-head {
+  font-weight: 700;
+  font-size: clamp(96px, 14vw, 168px);
+  line-height: 1;
+  letter-spacing: 0.1em;
   display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
-}
-
-/* 标题 · 提示符 + 终端字体 */
-body[data-theme="terminal"] .title {
-  font-family: var(--font-ui);
-  font-weight: 500;
-  font-size: clamp(12px, 1.2vw, 15px);
-  display: flex;
-  align-items: baseline;
-  flex-wrap: wrap;
-  gap: 0.5em;
-  margin: 0;
+  gap: 0.2em;
   color: var(--ink);
-  text-transform: none;
-  line-height: 1.4;
+  user-select: none;
+  text-shadow: 0 0 8px rgba(51, 255, 0, 0.4);
+}
+
+body[data-theme="terminal"] .hero-char:last-child {
+  color: var(--amber);
+  text-shadow: 0 0 10px rgba(255, 176, 0, 0.5);
+}
+
+/* 标题行 · 命令回显 */
+body[data-theme="terminal"] .content-head {
+  align-items: flex-start;
+  width: 100%;
   text-align: left;
 }
 
-body[data-theme="terminal"] .title .name {
+body[data-theme="terminal"] .signature-line {
   font-family: var(--font-ui);
-  font-weight: 500;
-  font-size: 1em;
+  font-size: clamp(14px, 1.3vw, 16px);
   letter-spacing: 0.05em;
+  width: 100%;
+  justify-content: flex-start;
   color: var(--ink);
-  text-shadow: 0 0 4px rgba(51, 255, 0, 0.35);
-  font-style: normal;
-  text-transform: none;
+  text-shadow: 0 0 4px rgba(51, 255, 0, 0.3);
 }
 
-body[data-theme="terminal"] .title .bar {
-  color: var(--ink-faint);
-  font-weight: 400;
-  font-size: 0.95em;
-  margin: 0 0.1em;
-}
-
-body[data-theme="terminal"] .title .tagline {
-  font-family: var(--font-ui);
-  font-weight: 400;
-  font-size: 0.9em;
-  letter-spacing: 0.05em;
-  color: var(--ink-soft);
-  text-shadow: 0 0 4px rgba(51, 255, 0, 0.25);
-  font-style: italic;
-  text-transform: none;
-}
-
-/* 标题前缀 · $ */
-body[data-theme="terminal"] .title::before {
+body[data-theme="terminal"] .signature-line::before {
   content: "$ ";
   color: var(--amber);
-  margin-right: 0.1em;
   font-weight: 700;
-  text-shadow: 0 0 4px rgba(255, 176, 0, 0.4);
 }
 
-/* 光标 · 闪烁 */
-body[data-theme="terminal"] .title .tagline::after {
+body[data-theme="terminal"] .signature-line .name {
+  font-weight: 500;
+  letter-spacing: 0.05em;
+}
+
+body[data-theme="terminal"] .signature-line .bar {
+  color: var(--ink-faint);
+  font-weight: 400;
+}
+
+body[data-theme="terminal"] .signature-line .tagline {
+  font-style: italic;
+  font-weight: 400;
+  color: var(--ink-soft);
+  text-shadow: 0 0 4px rgba(51, 255, 0, 0.2);
+}
+
+/* 光标闪烁 · 跟在 tagline 后 */
+body[data-theme="terminal"] .signature-line .tagline::after {
   content: "█";
   display: inline-block;
-  margin-left: 0.2em;
+  margin-left: 0.3em;
   color: var(--ink);
   animation: blink 1s steps(1) infinite;
-  font-weight: 400;
 }
 
 @keyframes blink {
   0%, 50% { opacity: 1; }
   50.01%, 100% { opacity: 0; }
-}
-
-/* 副标题 · 提示符 + 命令回显 */
-body[data-theme="terminal"] .subtitle {
-  font-family: var(--font-ui);
-  font-size: clamp(16px, 1.8vw, 22px);
-  color: var(--ink);
-  letter-spacing: 0.05em;
-  margin: 0;
-  text-transform: none;
-  text-align: left;
-}
-
-body[data-theme="terminal"] .subtitle::before {
-  content: "> ";
-  color: var(--amber);
-  font-weight: 700;
 }
 
 /* 链接 · shell 命令风格 */
@@ -463,22 +800,25 @@ body[data-theme="terminal"] .links a {
   grid-template-columns: auto 1fr auto;
   align-items: baseline;
   column-gap: 0.6em;
-  padding: 0.7em 0;
+  padding: 0.75em 0.4em;
   border-top: 1px dashed var(--line-soft);
   font-family: var(--font-ui);
-  font-size: clamp(13px, 1.4vw, 15px);
+  font-size: clamp(14px, 1.4vw, 16px);
   letter-spacing: 0.03em;
   color: var(--ink);
-  transition: background 0.15s ease, color 0.15s ease;
-  text-transform: none;
-  border-radius: 0;
+  transition: background 0.15s ease, color 0.15s ease, padding 0.15s ease;
+  text-align: left;
+}
+
+body[data-theme="terminal"] .links a:last-child {
+  border-bottom: 1px dashed var(--line-soft);
 }
 
 body[data-theme="terminal"] .links a:hover {
   background: var(--ink);
   color: var(--bg);
   text-shadow: none;
-  padding-left: 0.4em;
+  padding-left: 0.8em;
 }
 
 body[data-theme="terminal"] .links .leader {
@@ -487,8 +827,6 @@ body[data-theme="terminal"] .links .leader {
   background: none;
   color: var(--amber);
   font-weight: 700;
-  position: relative;
-  transform: none;
 }
 
 body[data-theme="terminal"] .links .leader::before {
@@ -496,25 +834,16 @@ body[data-theme="terminal"] .links .leader::before {
   color: var(--amber);
 }
 
-body[data-theme="terminal"] .links .leader::after {
-  content: "";
-  display: none;
-}
-
 body[data-theme="terminal"] .links .label {
   font-family: var(--font-ui);
   font-weight: 700;
-  font-size: 1em;
   letter-spacing: 0.02em;
-  color: var(--ink);
-}
-
-body[data-theme="terminal"] .links a:hover .label {
-  color: var(--bg);
+  color: inherit;
 }
 
 body[data-theme="terminal"] .links .desc {
   font-family: var(--font-ui);
+  font-style: normal;
   font-size: 0.85em;
   color: var(--ink-faint);
   letter-spacing: 0.02em;
@@ -534,8 +863,9 @@ body[data-theme="terminal"] .signature {
   font-family: var(--font-ui);
   font-size: clamp(11px, 1.1vw, 13px);
   color: var(--ink-faint);
-  letter-spacing: 0.1em;
+  letter-spacing: 0.12em;
   text-align: left;
+  width: 100%;
   margin-top: 0;
   padding-top: 0.6rem;
   border-top: 1px dashed var(--line-soft);
@@ -547,21 +877,19 @@ body[data-theme="terminal"] .signature::before {
   font-weight: 700;
 }
 
-/* 终端主题下的切换器 */
+/* 切换器 */
 body[data-theme="terminal"] .theme-switcher {
   color: var(--ink);
   font-family: var(--font-ui);
-  letter-spacing: 0.2em;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  font-size: 10px;
 }
 
 body[data-theme="terminal"] .theme-switcher button {
-  font-family: var(--font-ui);
-  color: var(--ink-faint);
   border: 1px solid var(--line);
-  background: transparent;
   border-radius: 0;
-  opacity: 1;
-  font-weight: 400;
+  color: var(--ink-faint);
   text-transform: uppercase;
 }
 
@@ -569,7 +897,6 @@ body[data-theme="terminal"] .theme-switcher button:hover {
   color: var(--bg);
   background: var(--ink);
   border-color: var(--ink);
-  opacity: 1;
 }
 
 body[data-theme="terminal"] .theme-switcher button[aria-pressed="true"] {
@@ -577,8 +904,6 @@ body[data-theme="terminal"] .theme-switcher button[aria-pressed="true"] {
   background: var(--ink);
   border-color: var(--ink);
   font-weight: 700;
-  text-shadow: none;
-  opacity: 1;
   box-shadow: 0 0 8px rgba(51, 255, 0, 0.5);
 }
 
@@ -597,9 +922,6 @@ body[data-theme="handdrawn"] {
   --ink-faint: rgba(45, 40, 35, 0.35);
   --line: rgba(45, 40, 35, 0.7);
   --line-soft: rgba(45, 40, 35, 0.15);
-  --card-bg: #fff8e7;
-  --card-border: #2d2823;
-  --card-shadow: 6px 6px 0px rgba(45, 40, 35, 0.9);
   --accent: #d2691e;
   --font-zh: "Patrick Hand", "Kalam", "Comic Sans MS", cursive;
   --font-en: "Kalam", "Patrick Hand", "Comic Sans MS", cursive;
@@ -627,181 +949,133 @@ body[data-theme="handdrawn"] .dot-bg {
   inset: 0;
   z-index: 0;
   pointer-events: none;
-  background-image: radial-gradient(circle, rgba(45, 40, 35, 0.25) 1.2px, transparent 1.2px);
+  background-image: radial-gradient(circle, rgba(45, 40, 35, 0.22) 1.2px, transparent 1.2px);
   background-size: 24px 24px;
   background-position: 0 0;
 }
 
-/* 卡片 · 手绘风 · 波浪边 + 硬阴影 + 旋转 */
+/* 卡片 · 速写卡片 · 波浪边 + 硬阴影 · 不旋转 */
 body[data-theme="handdrawn"] .card {
-  background: var(--card-bg);
-  border: 2.5px solid var(--card-border);
+  background: #fff8e7;
+  border: 2.5px solid var(--ink);
   border-radius: 22px 26px 20px 28px / 24px 22px 28px 20px;
-  box-shadow: var(--card-shadow);
-  transform: rotate(-0.6deg);
-  transition: transform 0.3s ease;
+  box-shadow: 5px 5px 0px rgba(45, 40, 35, 0.85);
 }
 
-body[data-theme="handdrawn"] .card:hover {
-  transform: rotate(-0.3deg) translateY(-2px);
-}
-
-body[data-theme="handdrawn"] .content {
-  padding: clamp(2rem, 4.5vw, 3.5rem) clamp(2.5rem, 5vw, 4rem);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  gap: clamp(1.2rem, 2vw, 1.8rem);
-  position: relative;
-  height: 100%;
-}
-
-/* 胶带效果 · 左上角 */
-body[data-theme="handdrawn"] .content::before {
+/* 胶带 · 左上角 */
+body[data-theme="handdrawn"] .card::before {
   content: "";
   position: absolute;
-  top: -14px;
-  left: 30px;
-  width: 70px;
-  height: 22px;
-  background: rgba(255, 220, 130, 0.7);
-  border: 1px solid rgba(45, 40, 35, 0.2);
-  transform: rotate(-6deg);
+  top: -12px;
+  left: 32px;
+  width: 64px;
+  height: 20px;
+  background: rgba(255, 220, 130, 0.75);
+  border: 1px solid rgba(45, 40, 35, 0.18);
+  transform: rotate(-5deg);
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+  z-index: 3;
 }
 
-body[data-theme="handdrawn"] .content-head {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.6rem;
-}
-
-body[data-theme="handdrawn"] .title {
-  font-family: var(--font-zh);
-  font-weight: 700;
-  font-size: clamp(13px, 1.3vw, 17px);
-  display: inline-flex;
-  align-items: baseline;
-  gap: 0.6em;
-  margin: 0;
-  color: var(--ink);
-  flex-wrap: wrap;
-  justify-content: center;
-  line-height: 1.3;
-}
-
-body[data-theme="handdrawn"] .title .name {
+/* Hero · 手绘 · 大字 + 橙记 */
+body[data-theme="handdrawn"] .hero {
   font-family: "Noto Serif SC", "Songti SC", "STSong", serif;
   font-weight: 700;
-  font-size: 1em;
-  letter-spacing: 0.14em;
+  font-size: clamp(120px, 20vw, 200px);
+  line-height: 0.95;
+  letter-spacing: 0.05em;
+  display: inline-flex;
+  gap: 0.08em;
   color: var(--ink);
-  font-style: normal;
-  text-transform: none;
+  user-select: none;
 }
 
-body[data-theme="handdrawn"] .title .bar {
+body[data-theme="handdrawn"] .hero-char:last-child {
+  color: var(--accent);
+}
+
+/* 标题行 */
+body[data-theme="handdrawn"] .signature-line {
+  color: var(--ink);
+  font-size: clamp(15px, 1.5vw, 18px);
+}
+
+body[data-theme="handdrawn"] .signature-line .name {
+  font-family: "Noto Serif SC", serif;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+}
+
+body[data-theme="handdrawn"] .signature-line .bar {
   color: var(--accent);
   font-weight: 400;
-  font-size: 0.95em;
 }
 
-body[data-theme="handdrawn"] .title .tagline {
-  font-family: "Noto Sans SC", "Inter", "Helvetica Neue", sans-serif;
+body[data-theme="handdrawn"] .signature-line .tagline {
+  font-family: "Noto Sans SC", "Inter", sans-serif;
   font-weight: 500;
-  font-size: 0.9em;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.12em;
   color: var(--ink-soft);
-  font-style: normal;
-  text-transform: none;
 }
 
-body[data-theme="handdrawn"] .subtitle {
-  font-family: var(--font-zh);
-  font-size: clamp(18px, 2vw, 24px);
-  color: var(--ink);
-  letter-spacing: 0.08em;
-  margin: 0;
-  font-style: italic;
-  display: inline-block;
-}
-
-body[data-theme="handdrawn"] .links {
-  width: 100%;
-  max-width: 360px;
-}
-
+/* 链接 */
 body[data-theme="handdrawn"] .links a {
-  display: grid;
-  grid-template-columns: auto 1fr auto auto;
-  align-items: center;
-  column-gap: 1em;
-  padding: 0.85em 0;
   border-top: 2px dashed var(--line-soft);
-  font-weight: 700;
   transition: transform 0.2s ease, color 0.2s ease;
 }
 
+body[data-theme="handdrawn"] .links a:last-child {
+  border-bottom: 2px dashed var(--line-soft);
+}
+
 body[data-theme="handdrawn"] .links a:hover {
-  transform: translateX(4px) rotate(-0.5deg);
+  transform: translateX(4px);
   color: var(--accent);
 }
 
 body[data-theme="handdrawn"] .links .leader {
-  width: 28px;
+  width: 26px;
   height: 2px;
   background: var(--ink);
-  position: relative;
-  transform: rotate(-1deg);
 }
 
 body[data-theme="handdrawn"] .links .leader::after {
   content: "";
-  position: absolute;
-  right: -4px;
-  top: -2px;
+  display: block;
   width: 6px;
   height: 6px;
   background: var(--ink);
   border-radius: 50%;
+  margin-top: -4px;
+  margin-left: 24px;
 }
 
 body[data-theme="handdrawn"] .links .label {
   font-family: var(--font-zh);
-  font-size: clamp(17px, 1.7vw, 20px);
-  letter-spacing: 0.02em;
+  font-weight: 700;
 }
 
 body[data-theme="handdrawn"] .links .desc {
   font-family: var(--font-en);
-  font-size: 0.8em;
+  font-weight: 400;
   color: var(--ink-soft);
-  letter-spacing: 0.02em;
 }
 
 body[data-theme="handdrawn"] .links .arrow {
   font-size: 1.1em;
   color: var(--accent);
   font-weight: 700;
-  transition: transform 0.2s ease;
 }
 
 body[data-theme="handdrawn"] .links a:hover .arrow {
-  transform: translate(3px, -3px) rotate(15deg);
+  transform: translate(3px, -3px);
 }
 
 body[data-theme="handdrawn"] .signature {
-  margin-top: 0;
   font-family: var(--font-en);
-  font-size: 0.9em;
+  font-weight: 400;
   color: var(--ink-soft);
-  letter-spacing: 0.02em;
-  text-align: center;
-  display: block;
-  width: 100%;
+  letter-spacing: 0.06em;
 }
 
 body[data-theme="handdrawn"] .signature::before,
@@ -810,99 +1084,7 @@ body[data-theme="handdrawn"] .signature::after {
   color: var(--accent);
 }
 
-/* ============================================
-   共享布局
-   ============================================ */
-
-.stage {
-  position: relative;
-  z-index: 10;
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: clamp(4rem, 8vh, 6rem) clamp(1.5rem, 5vw, 3rem);
-  animation: fadeUp 0.8s ease-out both;
-}
-
-@keyframes fadeUp {
-  from {
-    opacity: 0;
-    transform: translateY(8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.card {
-  width: 100%;
-  max-width: 900px;
-  min-height: 450px;
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.content {
-  position: relative;
-  z-index: 2;
-  width: 100%;
-}
-
-/* ============================================
-   左下角主题切换器
-   ============================================ */
-
-.theme-switcher {
-  position: fixed;
-  left: clamp(1.2rem, 2.5vw, 2rem);
-  bottom: clamp(1.2rem, 2.5vw, 2rem);
-  z-index: 100;
-  display: flex;
-  align-items: center;
-  gap: 0.6em;
-  font-size: 12px;
-  letter-spacing: 0.15em;
-  user-select: none;
-}
-
-.theme-switcher button {
-  padding: 0.4em 0.8em;
-  font-family: inherit;
-  font-size: 12px;
-  letter-spacing: 0.15em;
-  border-radius: 4px;
-  transition: all 0.3s ease;
-  opacity: 0.45;
-}
-
-.theme-switcher button:hover {
-  opacity: 0.85;
-}
-
-.theme-switcher button[aria-pressed="true"] {
-  opacity: 1;
-  font-weight: 700;
-}
-
-/* Washi 主题下的切换器 */
-body[data-theme="washi"] .theme-switcher {
-  color: var(--ink-soft);
-}
-
-body[data-theme="washi"] .theme-switcher button[aria-pressed="true"] {
-  color: var(--ink);
-  background: rgba(26, 26, 26, 0.06);
-}
-
-body[data-theme="washi"] .theme-switcher .sep {
-  color: var(--ink-faint);
-}
-
-/* Hand-Drawn 主题下的切换器 */
+/* 切换器 */
 body[data-theme="handdrawn"] .theme-switcher {
   color: var(--ink);
   font-family: var(--font-ui);
@@ -912,7 +1094,6 @@ body[data-theme="handdrawn"] .theme-switcher button[aria-pressed="true"] {
   color: var(--accent);
   background: rgba(210, 105, 30, 0.1);
   border: 1.5px solid var(--accent);
-  transform: rotate(-1.5deg);
 }
 
 body[data-theme="handdrawn"] .theme-switcher button[aria-pressed="false"] {
@@ -922,323 +1103,4 @@ body[data-theme="handdrawn"] .theme-switcher button[aria-pressed="false"] {
 body[data-theme="handdrawn"] .theme-switcher .sep {
   color: var(--ink-faint);
   font-weight: 700;
-}
-
-/* ============================================
-   主题 4 · 报 (Newsprint) · 报纸编辑风
-   ============================================ */
-
-body[data-theme="newsprint"] {
-  --bg: #f9f9f7;
-  --ink: #111111;
-  --ink-soft: #525252;
-  --ink-faint: #a3a3a3;
-  --line: #111111;
-  --line-soft: #e5e5e0;
-  --red: #cc0000;
-  --card-bg: #f9f9f7;
-  --card-border: #111111;
-  --font-display: "Playfair Display", "Times New Roman", serif;
-  --font-body: "Lora", Georgia, serif;
-  --font-sans: "Inter", "Helvetica Neue", sans-serif;
-  --font-zh: "Noto Serif SC", "Songti SC", "STSong", serif;
-  --font-en: "Playfair Display", "Times New Roman", serif;
-  --font-ui: "Inter", "Helvetica Neue", sans-serif;
-  --font-mono: "JetBrains Mono", "Courier New", monospace;
-  background-color: var(--bg);
-  color: var(--ink);
-  font-family: var(--font-body);
-}
-
-body[data-theme="newsprint"] .paper-svg,
-body[data-theme="newsprint"] .koushi,
-body[data-theme="newsprint"] .drift,
-body[data-theme="newsprint"] .dot-bg,
-body[data-theme="newsprint"] .crt-scanlines {
-  display: none;
-}
-
-body[data-theme="newsprint"] .newsprint-bg {
-  display: block;
-}
-
-/* 报纸网点底纹 */
-body[data-theme="newsprint"] .newsprint-bg {
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4' viewBox='0 0 4 4'%3E%3Cpath fill='%23111111' fill-opacity='0.05' d='M1 3h1v1H1V3zm2-2h1v1H3V1z'/%3E%3C/svg%3E");
-}
-
-/* 卡片 · 报纸大框 · 0 圆角 · 3px 黑边 */
-body[data-theme="newsprint"] .card {
-  background: var(--card-bg);
-  border: 3px solid var(--card-border);
-  border-radius: 0;
-  box-shadow: none;
-  position: relative;
-  transition: box-shadow 0.2s ease, transform 0.2s ease;
-}
-
-body[data-theme="newsprint"] .card:hover {
-  box-shadow: 6px 6px 0px 0px var(--card-border);
-  transform: translate(-2px, -2px);
-}
-
-body[data-theme="newsprint"] .content {
-  padding: clamp(1.5rem, 3vw, 2.2rem) clamp(2rem, 4vw, 3rem);
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  justify-content: center;
-  text-align: left;
-  gap: clamp(1.2rem, 2vw, 1.8rem);
-  height: 100%;
-}
-
-body[data-theme="newsprint"] .content-head {
-  display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
-  padding-bottom: 0.7rem;
-  border-bottom: 2px solid var(--line);
-}
-
-/* 标题 · Playfair Display + Noto Serif SC */
-body[data-theme="newsprint"] .title {
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: clamp(14px, 1.5vw, 19px);
-  display: flex;
-  align-items: baseline;
-  flex-wrap: wrap;
-  gap: 0.6em;
-  margin: 0;
-  color: var(--ink);
-  text-transform: none;
-  font-style: normal;
-  line-height: 1.3;
-}
-
-body[data-theme="newsprint"] .title .name {
-  font-family: "Noto Serif SC", "Songti SC", "STSong", serif;
-  font-weight: 700;
-  font-size: 1em;
-  letter-spacing: 0.14em;
-  color: var(--ink);
-  font-style: normal;
-  text-transform: none;
-}
-
-body[data-theme="newsprint"] .title .bar {
-  color: var(--red);
-  font-weight: 400;
-  font-size: 0.95em;
-  font-family: var(--font-display);
-}
-
-body[data-theme="newsprint"] .title .tagline {
-  font-family: "Playfair Display", "Times New Roman", serif;
-  font-weight: 400;
-  font-size: 0.95em;
-  letter-spacing: 0.04em;
-  color: var(--ink);
-  font-style: italic;
-  text-transform: none;
-}
-
-/* 副标题 · Lora italic */
-body[data-theme="newsprint"] .subtitle {
-  font-family: var(--font-display);
-  font-size: clamp(24px, 2.6vw, 36px);
-  color: var(--ink);
-  letter-spacing: -0.01em;
-  margin: 0;
-  font-style: italic;
-  font-weight: 700;
-  line-height: 1.2;
-}
-
-/* 链接 · 报纸"目录"风格 */
-body[data-theme="newsprint"] .links {
-  width: 100%;
-  max-width: none;
-}
-
-body[data-theme="newsprint"] .links a {
-  display: grid;
-  grid-template-columns: auto 1fr auto;
-  align-items: center;
-  column-gap: 1rem;
-  padding: 0.85rem 0;
-  border-top: 1px solid var(--line);
-  font-family: var(--font-ui);
-  font-size: clamp(13px, 1.4vw, 15px);
-  letter-spacing: 0.05em;
-  color: var(--ink);
-  text-transform: uppercase;
-  font-weight: 500;
-  transition: background 0.15s ease, color 0.15s ease;
-  border-radius: 0;
-}
-
-body[data-theme="newsprint"] .links a:hover {
-  background: var(--ink);
-  color: var(--bg);
-}
-
-body[data-theme="newsprint"] .links a:last-child {
-  border-bottom: 1px solid var(--line);
-}
-
-body[data-theme="newsprint"] .links .leader {
-  width: auto;
-  height: auto;
-  background: none;
-  font-family: var(--font-mono);
-  font-size: 0.8em;
-  color: var(--red);
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  transform: none;
-  position: relative;
-}
-
-body[data-theme="newsprint"] .links .leader::before {
-  content: "§";
-  color: var(--red);
-  margin-right: 0.1em;
-}
-
-body[data-theme="newsprint"] .links .leader::after {
-  content: "";
-  display: none;
-}
-
-body[data-theme="newsprint"] .links .label {
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 1.2em;
-  letter-spacing: -0.01em;
-  color: var(--ink);
-  text-transform: none;
-  font-style: italic;
-}
-
-body[data-theme="newsprint"] .links a:hover .label {
-  color: var(--bg);
-}
-
-body[data-theme="newsprint"] .links .desc {
-  font-family: var(--font-mono);
-  font-size: 0.78em;
-  color: var(--ink-faint);
-  letter-spacing: 0.02em;
-  text-align: right;
-  text-transform: none;
-}
-
-body[data-theme="newsprint"] .links a:hover .desc {
-  color: rgba(249, 249, 247, 0.6);
-}
-
-body[data-theme="newsprint"] .links .arrow {
-  display: none;
-}
-
-/* 签名 · "All the news..." 等价 */
-body[data-theme="newsprint"] .signature {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  font-weight: 500;
-  color: var(--ink-soft);
-  letter-spacing: 0.2em;
-  text-align: left;
-  text-transform: uppercase;
-  margin-top: 0;
-  padding-top: 0.6rem;
-  border-top: 1px dashed var(--line);
-}
-
-/* Newsprint 主题下的切换器 */
-body[data-theme="newsprint"] .theme-switcher {
-  color: var(--ink);
-  font-family: var(--font-mono);
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  font-size: 11px;
-}
-
-body[data-theme="newsprint"] .theme-switcher button {
-  font-family: var(--font-mono);
-  color: var(--ink-soft);
-  border: 1px solid var(--line);
-  background: var(--bg);
-  border-radius: 0;
-  opacity: 1;
-  font-weight: 500;
-  text-transform: uppercase;
-  padding: 0.4em 0.7em;
-}
-
-body[data-theme="newsprint"] .theme-switcher button:hover {
-  color: var(--bg);
-  background: var(--ink);
-  border-color: var(--ink);
-  opacity: 1;
-}
-
-body[data-theme="newsprint"] .theme-switcher button[aria-pressed="true"] {
-  color: var(--bg);
-  background: var(--ink);
-  border-color: var(--ink);
-  font-weight: 700;
-  opacity: 1;
-}
-
-body[data-theme="newsprint"] .theme-switcher .sep {
-  color: var(--ink-faint);
-}
-
-/* ============================================
-   响应式
-   ============================================ */
-
-@media (max-width: 720px) {
-  .card {
-    min-height: 0;
-  }
-}
-
-@media (max-width: 600px) {
-  .title {
-    gap: 0.35em;
-  }
-  .links a {
-    grid-template-columns: auto 1fr auto;
-  }
-  .links .desc {
-    grid-column: 2 / 4;
-    font-size: 0.7em;
-    margin-top: 0.2em;
-  }
-  .theme-switcher {
-    font-size: 11px;
-  }
-}
-
-/* 用户偏好：减少动效 */
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
-  body[data-theme="washi"] .drift {
-    animation: none;
-  }
 }
