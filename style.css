@@ -13,8 +13,8 @@ html, body {
 }
 
 body {
-    background: #ffffff;
-    color: #1a1a1a;
+    background: #808081;
+    color: #ffffff;
     font-family: "Cormorant Garamond", "Noto Serif SC", Georgia, serif;
     font-weight: 400;
     font-size: 14px;
@@ -39,7 +39,7 @@ a { color: inherit; text-decoration: none; }
     font-size: 22px;
     font-weight: 500;
     letter-spacing: 0.3em;
-    color: #1a1a1a;
+    color: #ffffff;
     transition: color 0.2s ease;
 }
 .logo a:hover { color: #8b1a1a; }
@@ -60,12 +60,12 @@ a { color: inherit; text-decoration: none; }
     font-family: "Cormorant Garamond", "Noto Serif SC", Georgia, serif;
     font-size: 14px;
     font-weight: 400;
-    color: #1a1a1a;
+    color: #ffffff;
     letter-spacing: 0.05em;
     transition: color 0.2s ease;
 }
 .primary-nav a:hover { color: #8b1a1a; }
-.primary-nav .active a { color: #8b1a1a; font-weight: 500; }
+.primary-nav .active a { color: #ffffff; font-weight: 500; text-decoration: underline; text-underline-offset: 4px; }
 
 /* === Page content: image poster block === */
 .page-content {
@@ -88,7 +88,7 @@ a { color: inherit; text-decoration: none; }
     width: 100%;
     margin-top: 0;
     text-align: center;
-    color: #6a6a6a;
+    color: #d8d8d8;
     font-family: "Cormorant Garamond", "Noto Serif SC", Georgia, serif;
     font-style: italic;
     font-size: 13px;
