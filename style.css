@@ -7,6 +7,11 @@
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
+html, body {
+    height: 100%;
+    overflow: hidden;
+}
+
 body {
     background: #ffffff;
     color: #1a1a1a;
@@ -59,21 +64,28 @@ a { color: inherit; text-decoration: none; }
 
 /* === Page content: image poster block === */
 .page-content {
-    padding: 60px 40px 80px;
+    padding: 30px 40px 24px;
     display: flex;
+    flex-direction: column;
+    align-items: center;
     justify-content: center;
+    flex: 1 1 auto;
+    min-height: 0;
+    gap: 18px;
 }
 
 .image-block {
-    width: 100%;
-    max-width: 2500px;
+    width: auto;
+    height: min(60vh, 540px);
+    aspect-ratio: 3 / 2;
+    max-width: calc(100vw - 80px);
     margin: 0 auto;
 }
 
 .image-frame {
     position: relative;
     width: 100%;
-    padding-bottom: 66.68%; /* 3:2 = 66.6667% (参考站精确值) */
+    height: 100%;
     overflow: hidden;
     -webkit-mask-image: -webkit-radial-gradient(white, black);
     mask-image: radial-gradient(white, black);
@@ -88,15 +100,17 @@ a { color: inherit; text-decoration: none; }
     object-position: 50% 50%;
 }
 
-/* === Footer === */
-.site-footer {
-    padding: 30px 40px 40px;
+.caption {
+    display: block;
+    width: 100%;
+    margin-top: 28px;
     text-align: center;
     color: #6a6a6a;
     font-family: "Cormorant Garamond", "Noto Serif SC", Georgia, serif;
     font-style: italic;
     font-size: 13px;
     letter-spacing: 0.08em;
+    white-space: nowrap;
 }
 
 /* === 响应式 === */
@@ -105,7 +119,7 @@ a { color: inherit; text-decoration: none; }
     .primary-nav ul { gap: 18px; }
     .primary-nav a { font-size: 12px; }
     .page-content { padding: 40px 20px 60px; }
-    .site-footer { padding: 20px 20px 30px; font-size: 12px; }
+    .caption { font-size: 12px; margin-top: 20px; }
 }
 
 @media (max-width: 600px) {
@@ -118,7 +132,7 @@ a { color: inherit; text-decoration: none; }
     .primary-nav ul { gap: 14px; flex-wrap: wrap; justify-content: center; }
     .primary-nav a { font-size: 11px; }
     .page-content { padding: 24px 16px 40px; }
-    .site-footer { font-size: 11px; padding: 16px 16px 24px; }
+    .caption { font-size: 11px; margin-top: 16px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
