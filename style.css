@@ -60,7 +60,7 @@ a { color: inherit; text-decoration: none; }
     font-family: "Cormorant Garamond", "Noto Serif SC", Georgia, serif;
     font-size: 14px;
     font-weight: 400;
-    color: #ffffff;
+    color: #000000;
     letter-spacing: 0.05em;
     transition: color 0.2s ease;
 }
